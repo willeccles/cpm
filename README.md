@@ -1,5 +1,5 @@
 # Cactus Package Manager
-A wrapper for file managers to make them consistent for those of us who are
+A wrapper for package managers to make them consistent for those of us who are
 lazy. It's more like a package manager manager.
 
 ## Usage
