@@ -20,6 +20,7 @@ $ cpm [i|r|l|u|U|s|S|c|h] [pkg]...
 ## Supported package managers:
 
 - Apt
+- Fedora
 - MacPorts
 - pacman
 - XBPS
