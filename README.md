@@ -19,9 +19,10 @@ $ cpm [i|r|l|u|U|s|S|c|h] [pkg]...
 
 ## Supported package managers:
 
-- XBPS
-- MacPorts
 - Apt
+- MacPorts
+- pacman
+- XBPS
 
 ## Explicitly unsupported package managers:
 
