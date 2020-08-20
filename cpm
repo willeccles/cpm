@@ -1,0 +1,145 @@
+#!/bin/sh
+
+phi() {
+    >&2 printf "\033[33;1m-> \033[35;1m%s|%s\033[m %s\n" "$1" "$2" "$3"
+}
+
+usage() {
+    >&2 echo "\$ cpm [i|r|l|u|U|s|S|c|h] [pkg]..."
+    phi i "install" "install one or more packages"
+    phi r "remove " "remove one or more packages"
+    phi l "list   " "list installed packages"
+    phi u "update " "update package lists"
+    phi U "upgrade" "upgrade all packages"
+    phi s "search " "search for a package"
+    phi S "show   " "show information about a package"
+    phi c "clean  " "clean up leftover files/caches/orphans"
+    phi h "help   " "show this message"
+}
+
+pem() {
+    >&2 printf "\033[31;1merror:\033[m %s\n" "$1"
+}
+
+if [ $# -ge 1 ]; then
+    OP="$1"
+    shift
+    case "$OP" in
+        i|install)
+            if [ $# -lt 1 ]; then
+                pem "$OP: no package(s) specified"
+                exit 1
+            fi
+            OP='$INSTALL'
+            ;;
+        r|remove)
+            if [ $# -lt 1 ]; then
+                pem "$OP: no package(s) specified"
+                exit 1
+            fi
+            OP='$REMOVE'
+            ;;
+        l|list)
+            OP='$LIST'
+            ;;
+        u|update)
+            OP='$UPDATE'
+            ;;
+        U|upgrade)
+            OP='$UPGRADE'
+            ;;
+        s|search)
+            if [ $# -lt 1 ]; then
+                pem "$OP: please specify a package"
+                exit 1
+            elif [ $# -gt 1 ]; then
+                pem "$OP: only one package may be queried at a time"
+                exit 1
+            fi
+            OP='$SEARCH'
+            ;;
+        S|show)
+            if [ $# -lt 1 ]; then
+                pem echo "$OP: please specify a package"
+                exit 1
+            elif [ $# -gt 1 ]; then
+                pem "$OP: only one argument is allowed"
+                exit 1
+            fi
+            OP='$SHOW'
+            ;;
+        c|clean)
+            OP='$CLEAN'
+            ;;
+        h|help)
+            usage
+            exit 0
+            ;;
+        *)
+            pem "Unrecognized operation: $OP"
+            usage
+            exit 1
+            ;;
+    esac
+else
+    usage
+    exit 0
+fi
+
+if [ -f /etc/os-release ]; then
+    . /etc/os-release
+elif [ -f /usr/lib/os-release ]; then
+    . /usr/lib/os-release
+elif [ "$(uname -s)" = "Darwin" ]; then
+    if command -v port >/dev/null; then
+        NAME="Darwin-MacPorts"
+    elif command -v brew >/dev/null; then
+        pem "Homebrew is not supported [wontfix]"
+        exit 1
+    else
+        pem "No valid package manager detected."
+        exit 1
+    fi
+else
+    pem "Can't determine which distro this is."
+    exit 1
+fi
+
+case "$NAME" in
+    void)
+        INSTALL="xbps-install $@"
+        REMOVE="xbps-remove -R $@"
+        LIST="xbps-query -l"
+        UPDATE="xbps-install -S"
+        UPGRADE="xbps-install -Su && xbps-install -Su"
+        SEARCH="xbps-query -s $1 --repository"
+        SHOW="xbps-query -S $1 --repository"
+        CLEAN="xbps-remove -ROo"
+        ;;
+    Ubuntu|Debian\ GNU/Linux)
+        INSTALL="apt install $@"
+        REMOVE="apt remove $@"
+        LIST="apt list --installed"
+        UPDATE="apt update"
+        UPGRADE="apt dist-upgrade"
+        SEARCH="apt search $1"
+        SHOW="apt show $1"
+        CLEAN="apt autoremove"
+        ;;
+    Darwin-MacPorts)
+        INSTALL="port install -c $@"
+        REMOVE="port uninstall --follow-dependencies $@"
+        LIST="port installed"
+        UPDATE="port sync"
+        UPGRADE="port selfupdate"
+        SEARCH="port search $1"
+        SHOW="port info $1"
+        CLEAN="port reclaim"
+        ;;
+    *)
+        pem "Unsupported distribution detected."
+        exit 1
+        ;;
+esac
+
+eval "$OP"
