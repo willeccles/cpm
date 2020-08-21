@@ -28,3 +28,7 @@ $ cpm [i|r|l|u|U|s|S|c|h] [pkg]...
 ## Explicitly unsupported package managers:
 
 - Homebrew
+
+## My package manager isn't supported!!1!!11!1
+
+See CONTRIBUTING.md.

@@ -1,7 +1,7 @@
 #!/bin/sh
 
 phi() {
-    >&2 printf "\033[33;1m-> \033[35;1m%s|%s\033[m %s\n" "$1" "$2" "$3"
+    >&2 printf "\033[33;1m-> \033[35;1m%s | %s\033[m %s\n" "$1" "$2" "$3"
 }
 
 usage() {
@@ -9,10 +9,12 @@ usage() {
     phi i "install" "install one or more packages"
     phi r "remove " "remove one or more packages"
     phi l "list   " "list installed packages"
+    phi C "count  " "count installed packages"
     phi u "update " "update package lists"
     phi U "upgrade" "upgrade all packages"
     phi s "search " "search for a package"
     phi S "show   " "show information about a package"
+    phi I "info   " "same as show"
     phi c "clean  " "clean up leftover files/caches/orphans"
     phi h "help   " "show this message"
 }
@@ -30,23 +32,26 @@ if [ $# -ge 1 ]; then
                 pem "$OP: no package(s) specified"
                 exit 1
             fi
-            OP='$INSTALL'
+            OP='install'
             ;;
         r|remove)
             if [ $# -lt 1 ]; then
                 pem "$OP: no package(s) specified"
                 exit 1
             fi
-            OP='$REMOVE'
+            OP='remove'
             ;;
         l|list)
-            OP='$LIST'
+            OP='list'
+            ;;
+        C|count)
+            OP='count'
             ;;
         u|update)
-            OP='$UPDATE'
+            OP='update'
             ;;
         U|upgrade)
-            OP='$UPGRADE'
+            OP='upgrade'
             ;;
         s|search)
             if [ $# -lt 1 ]; then
@@ -56,7 +61,7 @@ if [ $# -ge 1 ]; then
                 pem "$OP: only one package may be queried at a time"
                 exit 1
             fi
-            OP='$SEARCH'
+            OP='search'
             ;;
         S|show)
             if [ $# -lt 1 ]; then
@@ -66,10 +71,10 @@ if [ $# -ge 1 ]; then
                 pem "$OP: only one argument is allowed"
                 exit 1
             fi
-            OP='$SHOW'
+            OP='show'
             ;;
         c|clean)
-            OP='$CLEAN'
+            OP='clean'
             ;;
         h|help)
             usage
@@ -86,62 +91,112 @@ else
     exit 0
 fi
 
-if command -v apt; then
+# pipe to this to get a count instead of relying on wc -l
+tot() {
+    i=0
+    while read -r line; do
+        i=$((i + 1))
+    done
+    echo $i
+}
+
+# replacement for command -v which ignores aliases
+# this is useful for me, don't ask why
+has() {
+    case "$(command -v $1 2>/dev/null)" in
+        alias*|"") return 1
+    esac
+}
+
+_apt() {
+    case "$OP" in
+        install) apt install $@;;
+        remove) apt remove $@;;
+        list) apt list --installed;;
+        count) dpkg-query -f '.\n' -W | tot;;
+        update) apt update;;
+        upgrade) apt dist-upgrade;;
+        search) apt search "$1";;
+        show) apt show "$1";;
+        clean) apt autoremove;;
+    esac
+}
+
+_dnf() {
+    case "$OP" in
+        install) dnf install $@;;
+        remove) dnf remove $@;;
+        list) dnf list --installed;;
+        count) rpm -qa | tot;;
+        update) dnf check-update;;
+        upgrade) dnf distro-sync;;
+        search) dnf search "$1";;
+        show) dnf info "$1";;
+        clean) dnf autoremove;;
+    esac
+}
+
+_pacman() {
+    case "$OP" in
+        install) pacman -S $@;;
+        remove) pacman -Rsu $@;;
+        list) pacman -Q;;
+        count) pacman -Qg --color never | tot;;
+        update) pacman -Sy;;
+        upgrade) pacman -Syu;;
+        search) pacman -Ss $1;;
+        show) pacman -Si $1;;
+        clean) pacman -Rns $(pacman -Qtdq) && pacman -Sc;;
+    esac
+}
+
+_macports() {
+    case "$OP" in
+        install) port install -c $@;;
+        remove) port uninstall --follow-dependencies $@;;
+        list) port installed;;
+        count) port installed | tot;;
+        update) port sync;;
+        upgrade) port selfupdate;;
+        search) port search $1;;
+        show) port info $1;;
+        clean) port reclaim;;
+    esac
+}
+
+_xbps() {
+    case "$OP" in
+        install) xbps-install $@;;
+        remove) xbps-remove -R $@;;
+        list) xbps-query -l;;
+        count) xbps-query -l | tot;;
+        update) xbps-install -S;;
+        upgrade) xbps-install -Su && xbps-install -Su;;
+        search) xbps-query -s "$1" --repository;;
+        show) xbps-query -S "$1" --repository;;
+        clean) xbps-remove -ROo;;
+    esac
+}
+
+if has apt; then
     # debian/ubuntu
-    INSTALL="apt install $@"
-    REMOVE="apt remove $@"
-    LIST="apt list --installed"
-    UPDATE="apt update"
-    UPGRADE="apt dist-upgrade"
-    SEARCH="apt search $1"
-    SHOW="apt show $1"
-    CLEAN="apt autoremove"
-elif command -v dnf >/dev/null; then
+    _apt
+elif has dnf; then
     # fedora
-    INSTALL="dnf install $@"
-    REMOVE="dnf remove $@"
-    LIST="dnf list --installed"
-    UPDATE="dnf check-update"
-    UPGRADE="dnf distro-sync"
-    SEARCH="dnf search $1"
-    SHOW="dnf info $1"
-    CLEAN="dnf autoremove"
-elif command -v pacman-key >/dev/null; then
+    _dnf
+elif has pacman-key; then
     # arch/manjaro
-    INSTALL="pacman -S $@"
-    REMOVE="pacman -Rsu $@"
-    LIST="pacman -Q"
-    UPDATE="pacman -Sy"
-    UPGRADE="pacman -Syu"
-    SEARCH="pacman -Ss $1"
-    SHOW="pacman -Si $1"
-    CLEAN="pacman -Rns \$(pacman -Qtdq) && pacman -Sc"
-elif command -v port >/dev/null; then
+    _pacman
+elif has port; then
     # macos
-    INSTALL="port install -c $@"
-    REMOVE="port uninstall --follow-dependencies $@"
-    LIST="port installed"
-    UPDATE="port sync"
-    UPGRADE="port selfupdate"
-    SEARCH="port search $1"
-    SHOW="port info $1"
-    CLEAN="port reclaim"
-elif command -v xbps-install >/dev/null; then
+    _macports
+elif has xbps-install; then
     # void
-    INSTALL="xbps-install $@"
-    REMOVE="xbps-remove -R $@"
-    LIST="xbps-query -l"
-    UPDATE="xbps-install -S"
-    UPGRADE="xbps-install -Su && xbps-install -Su"
-    SEARCH="xbps-query -s $1 --repository"
-    SHOW="xbps-query -S $1 --repository"
-    CLEAN="xbps-remove -ROo"
-elif command -v brew >/dev/null; then
+    _xbps
+elif has brew; then
     pem "Homebrew is not supported [wontfix]"
     exit 1
 else
     pem "No valid package manager detected."
     exit 1
 fi
-
-eval "$OP"
