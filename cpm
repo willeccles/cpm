@@ -63,7 +63,7 @@ if [ $# -ge 1 ]; then
             fi
             OP='search'
             ;;
-        S|show)
+        S|show|I|info)
             if [ $# -lt 1 ]; then
                 pem echo "$OP: please specify a package"
                 exit 1
@@ -82,7 +82,6 @@ if [ $# -ge 1 ]; then
             ;;
         *)
             pem "Unrecognized operation: $OP"
-            usage
             exit 1
             ;;
     esac
