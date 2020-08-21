@@ -96,6 +96,16 @@ if command -v apt; then
     SEARCH="apt search $1"
     SHOW="apt show $1"
     CLEAN="apt autoremove"
+elif command -v dnf >/dev/null; then
+    # fedora
+    INSTALL="dnf install $@"
+    REMOVE="dnf remove $@"
+    LIST="dnf list --installed"
+    UPDATE="dnf check-update"
+    UPGRADE="dnf distro-sync"
+    SEARCH="dnf search $1"
+    SHOW="dnf info $1"
+    CLEAN="dnf autoremove"
 elif command -v pacman-key >/dev/null; then
     # arch/manjaro
     INSTALL="pacman -S $@"
