@@ -138,7 +138,7 @@ _dnf() {
 _pacman() {
     case "$OP" in
         install) pacman -S $@;;
-        remove) pacman -Rsu $@;;
+        remove) pacman -Rs $@;;
         list) pacman -Q;;
         count) pacman -Q | tot;;
         update) pacman -Sy;;
