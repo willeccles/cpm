@@ -140,7 +140,7 @@ _pacman() {
         install) pacman -S $@;;
         remove) pacman -Rsu $@;;
         list) pacman -Q;;
-        count) pacman -Qg --color never | tot;;
+        count) pacman -Q | tot;;
         update) pacman -Sy;;
         upgrade) pacman -Syu;;
         search) pacman -Ss $1;;

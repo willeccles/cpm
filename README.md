@@ -21,11 +21,11 @@ $ cpm [i|r|l|u|U|s|S|c|h] [pkg]...
 
 ## Supported package managers:
 
-- Apt
-- Fedora
-- MacPorts
-- pacman
-- XBPS
+- apt (Debian/Ubuntu)
+- dnf (Fedora)
+- MacPorts (MacOS)
+- pacman (Arch)
+- xbps (Void)
 
 ## Explicitly unsupported package managers:
 
