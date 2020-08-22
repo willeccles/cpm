@@ -5,7 +5,7 @@ phi() {
 }
 
 usage() {
-    >&2 echo "\$ cpm [i|r|l|u|U|s|S|c|h] [pkg]..."
+    >&2 echo "cpm [i|r|l|C|u|U|s|S|I|c|h] [pkg]..."
     phi i "install" "install one or more packages"
     phi r "remove " "remove one or more packages"
     phi l "list   " "list installed packages"
