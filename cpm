@@ -23,72 +23,70 @@ pem() {
     >&2 printf "\033[31;1merror:\033[m %s\n" "$1"
 }
 
-if [ $# -ge 1 ]; then
-    OP="$1"
-    shift
-    case "$OP" in
-        i|install)
-            if [ $# -lt 1 ]; then
-                pem "$OP: no package(s) specified"
-                exit 1
-            fi
-            OP='install'
-            ;;
-        r|remove)
-            if [ $# -lt 1 ]; then
-                pem "$OP: no package(s) specified"
-                exit 1
-            fi
-            OP='remove'
-            ;;
-        l|list)
-            OP='list'
-            ;;
-        C|count)
-            OP='count'
-            ;;
-        u|update)
-            OP='update'
-            ;;
-        U|upgrade)
-            OP='upgrade'
-            ;;
-        s|search)
-            if [ $# -lt 1 ]; then
-                pem "$OP: please specify a package"
-                exit 1
-            elif [ $# -gt 1 ]; then
-                pem "$OP: only one package may be queried at a time"
-                exit 1
-            fi
-            OP='search'
-            ;;
-        S|show|I|info)
-            if [ $# -lt 1 ]; then
-                pem echo "$OP: please specify a package"
-                exit 1
-            elif [ $# -gt 1 ]; then
-                pem "$OP: only one argument is allowed"
-                exit 1
-            fi
-            OP='show'
-            ;;
-        c|clean)
-            OP='clean'
-            ;;
-        h|help)
-            usage
-            exit 0
-            ;;
-        *)
-            pem "Unrecognized operation: $OP"
+case "$1" in
+    i|install)
+        OP='install'
+        if [ $# -lt 2 ]; then
+            pem "$OP: no package(s) specified"
             exit 1
-            ;;
-    esac
-else
-    usage
-    exit 0
-fi
+        fi
+        ;;
+    r|remove)
+        OP='remove'
+        if [ $# -lt 2 ]; then
+            pem "$OP: no package(s) specified"
+            exit 1
+        fi
+        ;;
+    l|list)
+        OP='list'
+        ;;
+    C|count)
+        OP='count'
+        ;;
+    u|update)
+        OP='update'
+        ;;
+    U|upgrade)
+        OP='upgrade'
+        ;;
+    s|search)
+        OP='search'
+        if [ $# -lt 2 ]; then
+            pem "$OP: please specify a package"
+            exit 1
+        elif [ $# -gt 2 ]; then
+            pem "$OP: only one package may be queried at a time"
+            exit 1
+        fi
+        ;;
+    S|show|I|info)
+        OP='show'
+        if [ $# -lt 2 ]; then
+            pem "$OP: please specify a package"
+            exit 1
+        elif [ $# -gt 2 ]; then
+            pem "$OP: only one argument is allowed"
+            exit 1
+        fi
+        ;;
+    c|clean)
+        OP='clean'
+        ;;
+    h|help)
+        usage
+        exit 0
+        ;;
+    "")
+        usage
+        exit 1
+        ;;
+    *)
+        pem "Unrecognized operation: $1"
+        exit 1
+        ;;
+esac
+shift
 
 # pipe to this to get a count instead of relying on wc -l
 tot() {
@@ -138,7 +136,7 @@ _dnf() {
 _pacman() {
     case "$OP" in
         install) pacman -S $@;;
-        remove) pacman -Rsu $@;;
+        remove) pacman -Rs $@;;
         list) pacman -Q;;
         count) pacman -Q | tot;;
         update) pacman -Sy;;
