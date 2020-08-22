@@ -179,19 +179,19 @@ _xbps() {
 
 if has apt; then
     # debian/ubuntu
-    _apt
+    _apt $@
 elif has dnf; then
     # fedora
-    _dnf
+    _dnf $@
 elif has pacman-key; then
     # arch/manjaro
-    _pacman
+    _pacman $@
 elif has port; then
     # macos
-    _macports
+    _macports $@
 elif has xbps-install; then
     # void
-    _xbps
+    _xbps $@
 elif has brew; then
     pem "Homebrew is not supported [wontfix]"
     exit 1
