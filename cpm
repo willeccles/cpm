@@ -133,6 +133,20 @@ _dnf() {
     esac
 }
 
+_nix() {
+    case "$OP" in
+        install) nix-env -iA "$@";;
+        remove) niv-env -e "$@";;
+        list) nix-env -q "$@";;
+        count) nix-env -q | wc -l;;
+        update) nix-channel --update;;
+        upgrade) nix-env -u;;
+        search) nix-env -qa "$@";;
+        show) nix-env -qa --description "$@";;
+        clean) nix-collect-garbage -d;;
+    esac
+}
+
 _pacman() {
     case "$OP" in
         install) pacman -S "$@";;
@@ -181,6 +195,9 @@ if has apt; then
 elif has dnf; then
     # fedora
     _dnf $@
+elif has nix; then
+    # nix
+    _nix "$@"
 elif has pacman-key; then
     # arch/manjaro
     _pacman $@
