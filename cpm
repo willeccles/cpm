@@ -107,8 +107,8 @@ has() {
 
 _apt() {
     case "$OP" in
-        install) apt install $@;;
-        remove) apt remove $@;;
+        install) apt install "$@";;
+        remove) apt remove "$@";;
         list) apt list --installed;;
         count) dpkg-query -f '.\n' -W | tot;;
         update) apt update;;
@@ -121,8 +121,8 @@ _apt() {
 
 _dnf() {
     case "$OP" in
-        install) dnf install $@;;
-        remove) dnf remove $@;;
+        install) dnf install "$@";;
+        remove) dnf remove "$@";;
         list) dnf list --installed;;
         count) rpm -qa | tot;;
         update) dnf check-update;;
@@ -135,8 +135,8 @@ _dnf() {
 
 _pacman() {
     case "$OP" in
-        install) pacman -S $@;;
-        remove) pacman -Rs $@;;
+        install) pacman -S "$@";;
+        remove) pacman -Rs "$@";;
         list) pacman -Q;;
         count) pacman -Q | tot;;
         update) pacman -Sy;;
@@ -149,8 +149,8 @@ _pacman() {
 
 _macports() {
     case "$OP" in
-        install) port install -c $@;;
-        remove) port uninstall --follow-dependencies $@;;
+        install) port install -c "$@";;
+        remove) port uninstall --follow-dependencies "$@";;
         list) port installed;;
         count) port installed | tot;;
         update) port sync;;
@@ -163,8 +163,8 @@ _macports() {
 
 _xbps() {
     case "$OP" in
-        install) xbps-install $@;;
-        remove) xbps-remove -R $@;;
+        install) xbps-install "$@";;
+        remove) xbps-remove -R "$@";;
         list) xbps-query -l;;
         count) xbps-query -l | tot;;
         update) xbps-install -S;;
