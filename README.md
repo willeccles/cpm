@@ -24,6 +24,7 @@ $ cpm [i|r|l|u|U|s|S|c|h] [pkg]...
 - apt (Debian/Ubuntu)
 - dnf (Fedora)
 - MacPorts (MacOS)
+- nix (Global/NixOS)
 - pacman (Arch)
 - xbps (Void)
 
