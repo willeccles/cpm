@@ -1,4 +1,47 @@
 #!/bin/sh
+# shellcheck shell=sh # Written to be posix compatible
+# shellcheck disable=SC2034 # False Trigger
+
+
+# Created by Will Eccles <will@eccles.dev> in 2020 under the terms of Mozilla Public License Version 2.0
+
+# Maintainer info #
+# UPSTREAM="https://github.com/willeccles/cpm"
+# MAINTAINER_EMAIL="will@eccles.dev"
+# MAINTAINER_NICKNAME="willeccles"
+# MAINTAINER_NAME="Willeccles "
+
+
+###! A Script to detect other package managers and make them easy to use
+###! USAGE :- Defined in README.md
+###! Platform:
+###!  - [*] Linux
+###!    - [*] Archlinux
+###!    - [ ] Arya
+###!    - [*] Debian
+###!    - [ ] Exherbo
+###!    - [*] Fedora
+###!    - [ ] Gentoo
+###!    - [*] Nix
+###!    - [*] Ubuntu
+###!    - [*] Void
+###!  - [*] XNU
+###!    - [*] MacOS
+###! Package Manager:
+###!  - [*] Apt
+###!  - [ ] ALPS
+###!  - [ ] Paludis
+###!  - [*] dnf
+###!  - [*] MacPorts
+###!  - [*] nix
+###!  - [*] Pacman
+###!  - [ ] Portage
+###!  - [*] xbps
+
+
+# FIXME: Add Version
+# UPSTREAM_VERSION=?
+
 
 phi() {
     >&2 printf "\033[33;1m-> \033[35;1m%s | %s\033[m %s\n" "$1" "$2" "$3"
@@ -100,7 +143,7 @@ tot() {
 # replacement for command -v which ignores aliases
 # this is useful for me, don't ask why
 has() {
-    case "$(command -v $1 2>/dev/null)" in
+    case "$(command -v "$1" 2>/dev/null)" in
         alias*|"") return 1
     esac
 }
@@ -155,9 +198,9 @@ _pacman() {
         count) pacman -Q | tot;;
         update) pacman -Sy;;
         upgrade) pacman -Syu;;
-        search) pacman -Ss $1;;
-        show) pacman -Si $1;;
-        clean) pacman -Rns $(pacman -Qtdq) && pacman -Sc;;
+        search) pacman -Ss "$1";;
+        show) pacman -Si "$1";;
+        clean) pacman -Rns "$(pacman -Qtdq)" && pacman -Sc;;
     esac
 }
 
@@ -169,8 +212,8 @@ _macports() {
         count) port installed | tot;;
         update) port sync;;
         upgrade) port selfupdate;;
-        search) port search $1;;
-        show) port info $1;;
+        search) port search "$1";;
+        show) port info "$1";;
         clean) port reclaim;;
     esac
 }
