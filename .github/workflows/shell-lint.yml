@@ -1,0 +1,33 @@
+name: Shell-lint
+
+# Relevant to events - https://help.github.com/en/actions/automating-your-workflow-with-github-actions/events-that-trigger-workflows
+on:
+  push:
+    - branches: master
+  pull_request:
+    types: [synchronize, opened, reopened, ready_for_review]
+    paths:
+    - '**.sh'
+
+jobs:
+  # Linting
+  lint:
+    runs-on: ubuntu-latest
+    container: debian:stable
+    steps:
+      - name: Installing dependencies..
+        shell: bash
+        run: apt-get update -q && apt-get install shellcheck -qy
+      - name: Pulling the git repository..
+        uses: actions/checkout@v2
+      - name: Processing files..
+        shell: bash
+        run: |
+          cd "$GITHUB_WORKSPACE"
+
+          # Process files
+          ## NOTICE: Do not use for loop to avoid pitfall https://mywiki.wooledge.org/BashPitfalls#pf1
+          git --git-dir="$GITHUB_WORKSPACE/.git" ls-files -z -- '*.sh' | while IFS= read -rd '' file; do
+              printf 'linting shell file %s\n' "$file"
+              shellcheck --external-sources --shell=sh "$file"
+          done

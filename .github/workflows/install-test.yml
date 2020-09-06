@@ -1,0 +1,29 @@
+name: Bash
+
+# Relevant to events - https://help.github.com/en/actions/automating-your-workflow-with-github-actions/events-that-trigger-workflows
+on:
+  push:
+    - branch: master
+    paths:
+      - 'cpm.sh'
+  pull_request:
+    types: [synchronize, opened, reopened, ready_for_review]
+    paths:
+      - 'cpm.sh'
+
+jobs:
+  # Install nano on debian using cpm
+  debian-install-nano:
+    runs-on: ubuntu-latest
+    container: debian:stable
+    steps:
+      - name: Checking out the repository..
+        uses: actions/checkout@v2
+      - name: Trying to install nano using cpm
+        shell: bash
+        run: |
+          cd "$GITHUB_WORKSPACE"
+
+          [ -x "$GITHUB_WORKSPACE/cpm.sh" ] || chmod +x "$GITHUB_WORKSPACE/cpm.sh"
+
+          exec "$GITHUB_WORKSPACE/cpm.sh" install nano

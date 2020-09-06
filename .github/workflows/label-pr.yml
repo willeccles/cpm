@@ -1,0 +1,4 @@
+- regExp: ".*\\.bash+$"
+  labels: ["bash"]
+- regExp: ".*\\.sh+$"
+  labels: ["shell"]
