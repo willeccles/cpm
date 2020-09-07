@@ -135,15 +135,15 @@ _dnf() {
 
 _nix() {
     case "$OP" in
-        install) sudo nix-env -iA "$@";;
-        remove) sudo niv-env -e "$@";;
+        install) nix-env -iA "$@";;
+        remove) niv-env -e "$@";;
         list) nix-env -q "$@";;
         count) nix-env -q | wc -l;;
-        update) sudo nix-channel --update;;
-        upgrade) sudo nix-env -u;;
+        update) nix-channel --update;;
+        upgrade) nix-env -u;;
         search) nix-env -qa "$@";;
         show) nix-env -qa --description "$@";;
-        clean) sudo nix-collect-garbage -d;;
+        clean) nix-collect-garbage -d;;
     esac
 }
 
