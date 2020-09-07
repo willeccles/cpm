@@ -157,7 +157,7 @@ _pacman() {
         upgrade) sudo pacman -Syu;;
         search) pacman -Ss $1;;
         show) pacman -Si $1;;
-        clean) sudo pacman -Rns $(pacman -Qtdq) && pacman -Sc;;
+        clean) sudo pacman -Rns $(pacman -Qtdq) && sudo pacman -Sc;;
     esac
 }
 
@@ -182,7 +182,7 @@ _xbps() {
         list) xbps-query -l;;
         count) xbps-query -l | tot;;
         update) sudo xbps-install -S;;
-        upgrade) sudo xbps-install -Su && xbps-install -Su;;
+        upgrade) sudo xbps-install -Su && sudo xbps-install -Su;;
         search) xbps-query -s "$1" --repository;;
         show) xbps-query -S "$1" --repository;;
         clean) sudo xbps-remove -ROo;;
