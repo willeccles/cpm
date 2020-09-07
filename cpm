@@ -107,29 +107,29 @@ has() {
 
 _apt() {
     case "$OP" in
-        install) apt install "$@";;
-        remove) apt remove "$@";;
+        install) sudo apt install "$@";;
+        remove) sudo apt remove "$@";;
         list) apt list --installed;;
         count) dpkg-query -f '.\n' -W | tot;;
-        update) apt update;;
-        upgrade) apt dist-upgrade;;
+        update) sudo apt update;;
+        upgrade) sudo apt dist-upgrade;;
         search) apt search "$1";;
         show) apt show "$1";;
-        clean) apt autoremove;;
+        clean) sudo apt autoremove;;
     esac
 }
 
 _dnf() {
     case "$OP" in
-        install) dnf install "$@";;
-        remove) dnf remove "$@";;
+        install) sudo dnf install "$@";;
+        remove) sudo dnf remove "$@";;
         list) dnf list --installed;;
         count) rpm -qa | tot;;
-        update) dnf check-update;;
-        upgrade) dnf distro-sync;;
+        update) sudo dnf check-update;;
+        upgrade) sudo dnf distro-sync;;
         search) dnf search "$1";;
         show) dnf info "$1";;
-        clean) dnf autoremove;;
+        clean) sudo dnf autoremove;;
     esac
 }
 
@@ -149,43 +149,43 @@ _nix() {
 
 _pacman() {
     case "$OP" in
-        install) pacman -S "$@";;
-        remove) pacman -Rs "$@";;
+        install) sudo pacman -S "$@";;
+        remove) sudo pacman -Rs "$@";;
         list) pacman -Q;;
         count) pacman -Q | tot;;
-        update) pacman -Sy;;
-        upgrade) pacman -Syu;;
+        update) sudo pacman -Sy;;
+        upgrade) sudo pacman -Syu;;
         search) pacman -Ss $1;;
         show) pacman -Si $1;;
-        clean) pacman -Rns $(pacman -Qtdq) && pacman -Sc;;
+        clean) sudo pacman -Rns $(pacman -Qtdq) && sudo pacman -Sc;;
     esac
 }
 
 _macports() {
     case "$OP" in
-        install) port install -c "$@";;
-        remove) port uninstall --follow-dependencies "$@";;
+        install) sudo port install -c "$@";;
+        remove) sudo port uninstall --follow-dependencies "$@";;
         list) port installed;;
         count) port installed | tot;;
-        update) port sync;;
-        upgrade) port selfupdate;;
+        update) sudo port sync;;
+        upgrade) sudo port selfupdate;;
         search) port search $1;;
         show) port info $1;;
-        clean) port reclaim;;
+        clean) sudo port reclaim;;
     esac
 }
 
 _xbps() {
     case "$OP" in
-        install) xbps-install "$@";;
-        remove) xbps-remove -R "$@";;
+        install) sudo xbps-install "$@";;
+        remove) sudo xbps-remove -R "$@";;
         list) xbps-query -l;;
         count) xbps-query -l | tot;;
-        update) xbps-install -S;;
-        upgrade) xbps-install -Su && xbps-install -Su;;
+        update) sudo xbps-install -S;;
+        upgrade) sudo xbps-install -Su && sudo xbps-install -Su;;
         search) xbps-query -s "$1" --repository;;
         show) xbps-query -S "$1" --repository;;
-        clean) xbps-remove -ROo;;
+        clean) sudo xbps-remove -ROo;;
     esac
 }
 
