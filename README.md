@@ -19,6 +19,16 @@ $ cpm [i|r|l|u|U|s|S|c|h] [pkg]...
 -> h|help    show this message
 ```
 
+## Installation:
+```
+git clone https://github.com/willeccles/cpm.git
+cd cpm/
+sudo chmod +x cpm
+echo /bin/ ~/.local/bin/ | xargs -n 1 sudo cp cpm
+cd ..
+sudo rm -r cpm/
+cpm h```
+
 ## Supported package managers:
 
 - apt (Debian/Ubuntu)
