@@ -27,7 +27,8 @@ sudo chmod +x cpm
 echo /bin/ ~/.local/bin/ | xargs -n 1 sudo cp cpm
 cd ..
 sudo rm -r cpm/
-cpm h```
+cpm h
+```
 
 ## Supported package managers:
 
