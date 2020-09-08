@@ -105,31 +105,42 @@ has() {
     esac
 }
 
+# figure out which sudo command to use
+# this is somewhat based on how xtools does it (for xi, specifically)
+SUDO=
+if command -v sudo >/dev/null; then
+    SUDO=sudo
+elif command -v doas >/dev/null && [ -f /etc/doas.conf ]; then
+    SUDO=doas
+elif [ "$(whoami)" != root ]; then
+    SUDO='su root -c '\''"$@"'\'' -- -'
+fi
+
 _apt() {
     case "$OP" in
-        install) sudo apt install "$@";;
-        remove) sudo apt remove "$@";;
+        install) $SUDO apt install "$@";;
+        remove) $SUDO apt remove "$@";;
         list) apt list --installed;;
         count) dpkg-query -f '.\n' -W | tot;;
-        update) sudo apt update;;
-        upgrade) sudo apt dist-upgrade;;
+        update) $SUDO apt update;;
+        upgrade) $SUDO apt dist-upgrade;;
         search) apt search "$1";;
         show) apt show "$1";;
-        clean) sudo apt autoremove;;
+        clean) $SUDO apt autoremove;;
     esac
 }
 
 _dnf() {
     case "$OP" in
-        install) sudo dnf install "$@";;
-        remove) sudo dnf remove "$@";;
+        install) $SUDO dnf install "$@";;
+        remove) $SUDO dnf remove "$@";;
         list) dnf list --installed;;
         count) rpm -qa | tot;;
-        update) sudo dnf check-update;;
-        upgrade) sudo dnf distro-sync;;
+        update) $SUDO dnf check-update;;
+        upgrade) $SUDO dnf distro-sync;;
         search) dnf search "$1";;
         show) dnf info "$1";;
-        clean) sudo dnf autoremove;;
+        clean) $SUDO dnf autoremove;;
     esac
 }
 
@@ -149,43 +160,43 @@ _nix() {
 
 _pacman() {
     case "$OP" in
-        install) sudo pacman -S "$@";;
-        remove) sudo pacman -Rs "$@";;
+        install) $SUDO pacman -S "$@";;
+        remove) $SUDO pacman -Rs "$@";;
         list) pacman -Q;;
         count) pacman -Q | tot;;
-        update) sudo pacman -Sy;;
-        upgrade) sudo pacman -Syu;;
+        update) $SUDO pacman -Sy;;
+        upgrade) $SUDO pacman -Syu;;
         search) pacman -Ss $1;;
         show) pacman -Si $1;;
-        clean) sudo pacman -Rns $(pacman -Qtdq) && sudo pacman -Sc;;
+        clean) $SUDO pacman -Rns $(pacman -Qtdq) && $SUDO pacman -Sc;;
     esac
 }
 
 _macports() {
     case "$OP" in
-        install) sudo port install -c "$@";;
-        remove) sudo port uninstall --follow-dependencies "$@";;
+        install) $SUDO port install -c "$@";;
+        remove) $SUDO port uninstall --follow-dependencies "$@";;
         list) port installed;;
         count) port installed | tot;;
-        update) sudo port sync;;
-        upgrade) sudo port selfupdate;;
+        update) $SUDO port sync;;
+        upgrade) $SUDO port selfupdate;;
         search) port search $1;;
         show) port info $1;;
-        clean) sudo port reclaim;;
+        clean) $SUDO port reclaim;;
     esac
 }
 
 _xbps() {
     case "$OP" in
-        install) sudo xbps-install "$@";;
-        remove) sudo xbps-remove -R "$@";;
+        install) $SUDO xbps-install "$@";;
+        remove) $SUDO xbps-remove -R "$@";;
         list) xbps-query -l;;
         count) xbps-query -l | tot;;
-        update) sudo xbps-install -S;;
-        upgrade) sudo xbps-install -Su && sudo xbps-install -Su;;
+        update) $SUDO xbps-install -S;;
+        upgrade) $SUDO xbps-install -Su && $SUDO xbps-install -Su;;
         search) xbps-query -s "$1" --repository;;
         show) xbps-query -S "$1" --repository;;
-        clean) sudo xbps-remove -ROo;;
+        clean) $SUDO xbps-remove -ROo;;
     esac
 }
 
