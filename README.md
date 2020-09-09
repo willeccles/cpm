@@ -19,7 +19,15 @@ $ cpm [i|r|l|u|U|s|S|c|h] [pkg]...
 -> h|help    show this message
 ```
 
-## Supported package managers:
+## Installation
+```
+git clone https://github.com/willeccles/cpm.git
+cd cpm/
+sudo install -m755 cpm /bin/cpm
+# do whatever you want from here
+```
+
+## Supported package managers
 
 - apt (Debian/Ubuntu)
 - dnf (Fedora)
@@ -28,7 +36,7 @@ $ cpm [i|r|l|u|U|s|S|c|h] [pkg]...
 - pacman (Arch)
 - xbps (Void)
 
-## Explicitly unsupported package managers:
+## Explicitly unsupported package managers
 
 - Homebrew
 
