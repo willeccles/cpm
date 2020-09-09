@@ -23,8 +23,7 @@ $ cpm [i|r|l|u|U|s|S|c|h] [pkg]...
 ```
 git clone https://github.com/willeccles/cpm.git
 cd cpm/
-sudo chmod +x cpm
-echo /bin/ ~/.local/bin/ | xargs -n 1 sudo cp cpm
+sudo install -m755 cpm /bin/cpm
 cd ..
 sudo rm -r cpm/
 cpm h
