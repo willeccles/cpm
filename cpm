@@ -126,7 +126,7 @@ _apk() {
 	upgrade) $SUDO apk upgrade;;
 	search)  $SUDO apk search -v "$1";;
 	show)    $SUDO apk search "$1";;
-	clean)   $SUDO echo "apk does not have an autoremove option!";;
+	clean)   $SUDO apk cache clean;;
     esac
 }
 
