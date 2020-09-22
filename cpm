@@ -116,6 +116,20 @@ elif [ "$(whoami)" != root ]; then
     SUDO='su root -c '\''"$@"'\'' -- -'
 fi
 
+_apk() {
+    case "$OP" in
+	install) $SUDO apk add "$@";;
+	remove)  $SUDO apk del "$@";;
+	list)    $SUDO apk info -vv;;
+	count)   $SUDO apk info --vv || tot;;
+	update)  $SUDO apk update;;
+	upgrade) $SUDO apk upgrade;;
+	search)  $SUDO apk search -v "$1";;
+	show)    $SUDO apk search "$1";;
+	clean)   $SUDO apk cache clean;;
+    esac
+}
+
 _apt() {
     case "$OP" in
         install) $SUDO apt install "$@";;
@@ -200,7 +214,10 @@ _xbps() {
     esac
 }
 
-if has apt; then
+if   has apk; then
+    # alpine/adelie
+    _apk "$@"
+elif has apt; then
     # debian/ubuntu
     _apt "$@"
 elif has dnf; then
