@@ -29,6 +29,7 @@ sudo install -m755 cpm /bin/cpm
 
 ## Supported package managers
 
+- apk (Alpine)
 - apt (Debian/Ubuntu)
 - dnf (Fedora)
 - MacPorts (MacOS)
