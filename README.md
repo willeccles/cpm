@@ -31,6 +31,7 @@ sudo install -m755 cpm /bin/cpm
 
 - apk (Alpine)
 - apt (Debian/Ubuntu)
+- emerge (Gentoo)
 - dnf (Fedora)
 - MacPorts (MacOS)
 - nix (Global/NixOS)
