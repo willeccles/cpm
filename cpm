@@ -151,13 +151,15 @@ _portage() {
 	list)    if has qlist; then
 		 	qlist -IRv
 	 	 else
-		 	>&2 echo "Could not find program qlist"
+		 	>&2 echo "Could not find qlist"
+			exit 1
 		 fi
 		 ;;
 	count)   if has eix; then
 			eix --world | tot
 		 else
-			>&2 echo "Could not find program eix"
+			>&2 echo "Could not find eix"
+			exit 1
 		 fi
 		 ;;
 	update)  $SUDO emerge --sync;;
