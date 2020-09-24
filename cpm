@@ -1,4 +1,5 @@
 #!/bin/sh
+# vim: set ai ts=4 et sw=4 tw=80:
 
 phi() {
     >&2 printf "\033[33;1m-> \033[35;1m%s | %s\033[m %s\n" "$1" "$2" "$3"
@@ -118,15 +119,15 @@ fi
 
 _apk() {
     case "$OP" in
-	install) $SUDO apk add "$@";;
-	remove)  $SUDO apk del "$@";;
-	list)    apk -vv info;;
-	count)   apk -vv info || tot;;
-	update)  $SUDO apk update;;
-	upgrade) $SUDO apk upgrade;;
-	search)  apk search -v "$1";;
-	show)    apk search "$1";;
-	clean)   $SUDO apk cache clean;;
+        install) $SUDO apk add "$@";;
+        remove)  $SUDO apk del "$@";;
+        list)    apk -vv info;;
+        count)   apk -vv info || tot;;
+        update)  $SUDO apk update;;
+        upgrade) $SUDO apk upgrade;;
+        search)  apk search -v "$1";;
+        show)    apk search "$1";;
+        clean)   $SUDO apk cache clean;;
     esac
 }
 
@@ -146,27 +147,29 @@ _apt() {
 
 _portage() {
     case "$OP" in
-	install) $SUDO emerge -atv "$@";;
-	remove)  $SUDO emerge -avc "$@";;
-	list)    if has qlist; then
-		 	qlist -IRv
-	 	 else
-		 	>&2 echo "Could not find qlist"
-			exit 1
-		 fi
-		 ;;
-	count)   if has eix; then
-			eix --world | tot
-		 else
-			>&2 echo "Could not find eix"
-			exit 1
-		 fi
-		 ;;
-	update)  $SUDO emerge --sync;;
-	upgrade) $SUDO emerge -uDU --keep-going --with-bdeps=y @world;;
-	search)  emerge -s "$@";;
-	show)    emerge -s "$@";;
-	clean)   $SUDO emerge --depclean -v;;
+        install) $SUDO emerge -atv "$@";;
+        remove)  $SUDO emerge -avc "$@";;
+        list)
+            if has qlist; then
+                qlist -IRv
+            else
+                >&2 echo "Could not find qlist"
+                exit 1
+            fi
+            ;;
+        count)
+            if has eix; then
+                eix --world | tot
+            else
+                >&2 echo "Could not find eix"
+                exit 1
+            fi
+            ;;
+        update)  $SUDO emerge --sync;;
+        upgrade) $SUDO emerge -uDU --keep-going --with-bdeps=y @world;;
+        search)  emerge -s "$@";;
+        show)    emerge -s "$@";;
+        clean)   $SUDO emerge --depclean -v;;
     esac
 }
 
