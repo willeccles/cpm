@@ -148,9 +148,19 @@ _portage() {
     case "$OP" in
 	install) $SUDO emerge -atv "$@";;
 	remove)  $SUDO emerge -avc "$@";;
-	list)    echo "qlist -IRv";;
-	count)   echo "eix --world | tot";;
-	update)  $SUDO emaint -a sync;;
+	list)    if has qlist; then
+		 	qlist -IRv
+	 	 else
+		 	>&2 echo "Could not find program qlist"
+		 fi
+		 ;;
+	count)   if has eix; then
+			eix --world | tot
+		 else
+			>&2 echo "Could not find program eix"
+		 fi
+		 ;;
+	update)  $SUDO emerge --sync;;
 	upgrade) $SUDO emerge -uDU --keep-going --with-bdeps=y @world;;
 	search)  emerge -s "$@";;
 	show)    emerge -s "$@";;
