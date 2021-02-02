@@ -236,7 +236,7 @@ _xbps() {
         list) xbps-query -l;;
         count) xbps-query -l | tot;;
         update) $SUDO xbps-install -S;;
-        upgrade) $SUDO xbps-install -Su && $SUDO xbps-install -Su;;
+        upgrade) $SUDO xbps-install -Su xbps && $SUDO xbps-install -u;;
         search) xbps-query -s "$1" --repository;;
         show) xbps-query -S "$1" --repository;;
         clean) $SUDO xbps-remove -ROo;;
