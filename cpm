@@ -257,6 +257,20 @@ _xbps() {
     esac
 }
 
+_slackpkg() {
+    case "$OP" in
+        install) $SUDO slackpkg install "$@";;
+        remove) $SUDO slackpkg remove "$@";;
+        list) ls -l /var/log/packages/;;
+        count) ls -l /var/log/packages/ | tot;;
+        update) $SUDO slackpkg update gpg && slackpkg update;;
+        upgrade) $SUDO slackpkg upgrade-all;;
+        search) slackpkg search $1;;
+        show) slackpkg info $1;;
+        clean) $SUDO slackpkg clean-system;;
+    esac
+}
+
 if   has apk; then
     # alpine/adelie
     _apk "$@"
@@ -284,6 +298,9 @@ elif has port; then
 elif has xbps-install; then
     # void
     _xbps "$@"
+elif has slackpkg; then
+    # slackware
+    _slackpkg "$@"
 elif has brew; then
     pem "Homebrew is not supported [wontfix]"
     exit 1
