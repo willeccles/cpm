@@ -269,21 +269,21 @@ elif has emerge; then
 elif has dnf; then
     # fedora
     _dnf "$@"
+elif has nix; then
+    # nix
+    _nix "$@"
 elif has pacman-key; then
     # arch/manjaro
     _pacman "$@"
+elif has urpmi; then
+    # mageia
+    _urpmi "&@"
 elif has port; then
     # macos
     _macports "$@"
 elif has xbps-install; then
     # void
     _xbps "$@"
-elif has nix; then
-    # nix
-    _nix "$@"
-elif has urpmi; then
-    # mageia
-    _urpmi "&@"
 elif has brew; then
     pem "Homebrew is not supported [wontfix]"
     exit 1
