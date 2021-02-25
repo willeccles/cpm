@@ -215,6 +215,20 @@ _pacman() {
     esac
 }
 
+_urpmi() {
+    case "$OP" in
+        install) $SUDO urpmi "$@";;
+        remove) $SUDO urpme "$@";;
+        list) rpm -qa;;
+        count) rpm -qa | tot;;
+        update) $SUDO urpmi.update -a;;
+        upgrade) $SUDO urpmi --auto-update;;
+        search) urpmq -Y $1;;
+        show) urpmq --summary $1;;
+        clean) $SUDO urpme --auto-orphans;;
+    esac
+}
+
 _macports() {
     case "$OP" in
         install) $SUDO port install -c "$@";;
@@ -261,6 +275,9 @@ elif has nix; then
 elif has pacman-key; then
     # arch/manjaro
     _pacman "$@"
+elif has urpmi; then
+    # mageia
+    _urpmi "$@"
 elif has port; then
     # macos
     _macports "$@"
