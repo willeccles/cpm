@@ -215,6 +215,20 @@ _pacman() {
     esac
 }
 
+_urpmi() {
+    case "$OP" in
+        install) $SUDO pacman -S "$@";;
+        remove) $SUDO pacman -Rs "$@";;
+        list) pacman -Q;;
+        count) pacman -Q | tot;;
+        update) $SUDO pacman -Sy;;
+        upgrade) $SUDO pacman -Syu;;
+        search) pacman -Ss $1;;
+        show) pacman -Si $1;;
+        clean) $SUDO pacman -Rns $(pacman -Qtdq) && $SUDO pacman -Sc;;
+    esac
+}
+
 _macports() {
     case "$OP" in
         install) $SUDO port install -c "$@";;
@@ -267,6 +281,9 @@ elif has xbps-install; then
 elif has nix; then
     # nix
     _nix "$@"
+elif has urpmi; then
+    # mageia
+    _urpmi "&@"
 elif has brew; then
     pem "Homebrew is not supported [wontfix]"
     exit 1
