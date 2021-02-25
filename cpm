@@ -277,7 +277,7 @@ elif has pacman-key; then
     _pacman "$@"
 elif has urpmi; then
     # mageia
-    _urpmi "&@"
+    _urpmi "$@"
 elif has port; then
     # macos
     _macports "$@"
