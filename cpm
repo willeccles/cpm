@@ -217,15 +217,15 @@ _pacman() {
 
 _urpmi() {
     case "$OP" in
-        install) $SUDO pacman -S "$@";;
-        remove) $SUDO pacman -Rs "$@";;
-        list) pacman -Q;;
-        count) pacman -Q | tot;;
-        update) $SUDO pacman -Sy;;
-        upgrade) $SUDO pacman -Syu;;
-        search) pacman -Ss $1;;
-        show) pacman -Si $1;;
-        clean) $SUDO pacman -Rns $(pacman -Qtdq) && $SUDO pacman -Sc;;
+        install) $SUDO urpmi "$@";;
+        remove) $SUDO urpme "$@";;
+        list) rpm -qa;; # not sure if this works
+        count) rpm -qa | tot;; # and by proxy, this
+        update) $SUDO urpmi.update -a;;
+        upgrade) $SUDO urpmi --auto-update;;
+        search) urpmq -Y $1;;
+        show) urpmq --summary $1;;
+        clean) $SUDO urpme --auto-orphans;;
     esac
 }
 
