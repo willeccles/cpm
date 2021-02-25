@@ -266,7 +266,7 @@ _slackpkg() {
         update) $SUDO slackpkg update gpg && slackpkg update;;
         upgrade) $SUDO slackpkg upgrade-all;;
         search) slackpkg search $1;;
-        show) slackpkg Info $1;;
+        show) slackpkg info $1;;
         clean) $SUDO slackpkg clean-system;;
     esac
 }
