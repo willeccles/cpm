@@ -215,6 +215,20 @@ _pacman() {
     esac
 }
 
+_urpmi() {
+    case "$OP" in
+        install) $SUDO urpmi "$@";;
+        remove) $SUDO urpme "$@";;
+        list) rpm -qa;;
+        count) rpm -qa | tot;;
+        update) $SUDO urpmi.update -a;;
+        upgrade) $SUDO urpmi --auto-update;;
+        search) urpmq -Y $1;;
+        show) urpmq --summary $1;;
+        clean) $SUDO urpme --auto-orphans;;
+    esac
+}
+
 _macports() {
     case "$OP" in
         install) $SUDO port install -c "$@";;
@@ -255,18 +269,21 @@ elif has emerge; then
 elif has dnf; then
     # fedora
     _dnf "$@"
+elif has nix; then
+    # nix
+    _nix "$@"
 elif has pacman-key; then
     # arch/manjaro
     _pacman "$@"
+elif has urpmi; then
+    # mageia
+    _urpmi "$@"
 elif has port; then
     # macos
     _macports "$@"
 elif has xbps-install; then
     # void
     _xbps "$@"
-elif has nix; then
-    # nix
-    _nix "$@"
 elif has brew; then
     pem "Homebrew is not supported [wontfix]"
     exit 1
