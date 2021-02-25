@@ -36,6 +36,7 @@ sudo install -m755 cpm /bin/cpm
 - MacPorts (MacOS)
 - nix (Global/NixOS)
 - pacman (Arch)
+- urpmi (Mageia)
 - xbps (Void)
 
 ## Explicitly unsupported package managers
