@@ -255,6 +255,9 @@ elif has emerge; then
 elif has dnf; then
     # fedora
     _dnf "$@"
+elif has nix; then
+    # nix
+    _nix "$@"
 elif has pacman-key; then
     # arch/manjaro
     _pacman "$@"
@@ -264,9 +267,6 @@ elif has port; then
 elif has xbps-install; then
     # void
     _xbps "$@"
-elif has nix; then
-    # nix
-    _nix "$@"
 elif has brew; then
     pem "Homebrew is not supported [wontfix]"
     exit 1
