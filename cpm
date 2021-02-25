@@ -219,8 +219,8 @@ _urpmi() {
     case "$OP" in
         install) $SUDO urpmi "$@";;
         remove) $SUDO urpme "$@";;
-        list) rpm -qa;; # not sure if this works
-        count) rpm -qa | tot;; # and by proxy, this
+        list) rpm -qa;;
+        count) rpm -qa | tot;;
         update) $SUDO urpmi.update -a;;
         upgrade) $SUDO urpmi --auto-update;;
         search) urpmq -Y $1;;
