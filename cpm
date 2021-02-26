@@ -95,7 +95,25 @@ tot() {
     while read -r line; do
         i=$((i + 1))
     done
-    echo $i
+    printf '%s\n' "$i"
+}
+
+# count the files in a directory (similar to ls -l | wc -l) or something
+# usage: fcount /path/to/dir/*
+fcount() {
+    if [ -e "$1" ]; then
+        printf '%s\n' "$#"
+    else
+        printf '%s\n' 0
+    fi
+}
+
+# list files in a directory (similar to ls -l)
+flist() {
+    if [ -d "$1" ]; then
+        cd "$1"
+        printf '%s\n' *
+    fi
 }
 
 # replacement for command -v which ignores aliases
@@ -261,8 +279,8 @@ _slackpkg() {
     case "$OP" in
         install) $SUDO slackpkg install "$@";;
         remove) $SUDO slackpkg remove "$@";;
-        list) ls -l /var/log/packages/;;
-        count) ls -l /var/log/packages/ | tot;;
+        list) flist /var/log/packages;;
+        count) fcount /var/log/packages/*;;
         update) $SUDO slackpkg update gpg && slackpkg update;;
         upgrade) $SUDO slackpkg upgrade-all;;
         search) slackpkg search $1;;
