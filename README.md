@@ -29,7 +29,7 @@ sudo install -m755 cpm /bin/cpm
 
 ## Supported package managers
 
-- apk (Alpine)
+- apk (Alpine/Adélie)
 - apt (Debian/Ubuntu)
 - emerge (Gentoo)
 - dnf (Fedora)
