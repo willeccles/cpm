@@ -6,7 +6,7 @@ phi() {
 }
 
 usage() {
-    >&2 echo "cpm [i|r|l|C|u|U|s|S|I|f|c|h] [pkg]..."
+    >&2 echo "cpm [i|r|l|C|u|U|s|S|I|f|F|c|h] [pkg]..."
     phi i  "install" "install one or more packages"
     phi r  "remove " "remove one or more packages"
     phi l  "list   " "list installed packages"
@@ -17,7 +17,7 @@ usage() {
     phi S  "show   " "show information about a package"
     phi I  "info   " "same as show"
     phi f  "files  " "show file list of package"
-    phi f  "from   " "show package which owns a file"
+    phi F  "from   " "show package which owns a file"
     phi c  "clean  " "clean up leftover files/caches/orphans"
     phi h  "help   " "show this message"
 }
@@ -73,16 +73,10 @@ case "$1" in
             exit 1
         fi
         ;;
-    f)
-        case $2 in
-            /*) OP='from';;
-            *)  OP='files';;
-        esac
-        ;;
-    files)
+    f|files)
         OP='files'
         ;;
-    from)
+    F|from)
         OP='from'
         ;;
     c|clean)
@@ -253,7 +247,8 @@ _urpmi() {
         upgrade) $SUDO urpmi --auto-update;;
         search)  urpmq -Y $1;;
         show)    urpmq --summary $1;;
-        f*)      pem "unsupported due to PM being added mid-PR and gk being lazy; please see CONTRIBUTING.md";;
+        files)   rpm -ql "$@";;
+        from)    rpm -qf '$@";;
         clean)   $SUDO urpme --auto-orphans;;
     esac
 }
@@ -300,7 +295,8 @@ _slackpkg() {
         upgrade) $SUDO slackpkg upgrade-all;;
         search)  slackpkg search $1;;
         show)    slackpkg info $1;;
-        f*)      pem "unsupported due to PM being added mid-PR and gk being lazy; please see CONTRIBUTING.md";;
+        from)    slackpkg file-search "$@";;
+        files)   pem "unsupported because PM does not support it natively: should be added soon.";;
         clean)   $SUDO slackpkg clean-system;;
     esac
 }
