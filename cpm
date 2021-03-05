@@ -140,7 +140,7 @@ _apk() {
         install) $SUDO apk add "$@";;
         remove)  $SUDO apk del "$@";;
         list)    apk -vv info;;
-        count)   apk -vv info || tot;;
+        count)   apk -vv info | tot;;
         update)  $SUDO apk update;;
         upgrade) $SUDO apk upgrade;;
         search)  apk search -v "$1";;
