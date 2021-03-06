@@ -248,7 +248,7 @@ _urpmi() {
         search)  urpmq -Y $1;;
         show)    urpmq --summary $1;;
         files)   rpm -ql "$@";;
-        from)    rpm -qf '$@";;
+        from)    rpm -qf "$@";;
         clean)   $SUDO urpme --auto-orphans;;
     esac
 }
