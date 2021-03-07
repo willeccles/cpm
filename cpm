@@ -6,7 +6,7 @@ phi() {
 }
 
 usage() {
-    >&2 echo "cpm [i|r|l|C|u|U|s|S|I|f|c|h] [pkg]..."
+    >&2 echo "cpm [i|r|l|C|u|U|s|S|I|F|f|c|h] [pkg]..."
     phi i  "install" "install one or more packages"
     phi r  "remove " "remove one or more packages"
     phi l  "list   " "list installed packages"
@@ -16,7 +16,7 @@ usage() {
     phi s  "search " "search for a package"
     phi S  "show   " "show information about a package"
     phi I  "info   " "same as show"
-    phi f  "files  " "show file list of package"
+    phi F  "files  " "show file list of package"
     phi f  "from   " "show package which owns a file"
     phi c  "clean  " "clean up leftover files/caches/orphans"
     phi h  "help   " "show this message"
@@ -73,16 +73,10 @@ case "$1" in
             exit 1
         fi
         ;;
-    f)
-        case $2 in
-            /*) OP='from';;
-            *)  OP='files';;
-        esac
-        ;;
-    files)
+    F|files)
         OP='files'
         ;;
-    from)
+    f|from)
         OP='from'
         ;;
     c|clean)
