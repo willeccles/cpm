@@ -5,7 +5,7 @@ lazy. It's more like a package manager manager.
 ## Usage
 
 ```
-$ cpm [i|r|l|u|U|s|S|I|f|F|c|h] [pkg]...
+$ cpm [i|r|l|u|U|s|S|I|F|f|c|h] [pkg]...
 -> i|install install one or more packages
 -> r|remove  remove one or more packages
 -> l|list    list installed packages
@@ -15,8 +15,8 @@ $ cpm [i|r|l|u|U|s|S|I|f|F|c|h] [pkg]...
 -> s|search  search for a package
 -> S|show    show information about a package
 -> I|info    same as show
--> f|files   show file list of package
--> F|from    show package which owns a file
+-> F|files   show file list of package
+-> f|from    show package which owns a file
 -> c|clean   clean up leftover files/caches/orphans
 -> h|help    show this message
 ```
@@ -31,7 +31,7 @@ sudo install -m755 cpm /bin/cpm
 
 ## Supported package managers
 
-- apk (Adélie/Alpine)
+- apk (Alpine/Adélie)
 - apt (Debian/Ubuntu)
 - emerge (Gentoo)
 - dnf (Fedora)

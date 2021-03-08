@@ -6,7 +6,7 @@ phi() {
 }
 
 usage() {
-    >&2 echo "cpm [i|r|l|C|u|U|s|S|I|f|F|c|h] [pkg]..."
+    >&2 echo "cpm [i|r|l|C|u|U|s|S|I|F|f|c|h] [pkg]..."
     phi i  "install" "install one or more packages"
     phi r  "remove " "remove one or more packages"
     phi l  "list   " "list installed packages"
@@ -16,8 +16,8 @@ usage() {
     phi s  "search " "search for a package"
     phi S  "show   " "show information about a package"
     phi I  "info   " "same as show"
-    phi f  "files  " "show file list of package"
-    phi F  "from   " "show package which owns a file"
+    phi F  "files  " "show file list of package"
+    phi f  "from   " "show package which owns a file"
     phi c  "clean  " "clean up leftover files/caches/orphans"
     phi h  "help   " "show this message"
 }
@@ -73,10 +73,10 @@ case "$1" in
             exit 1
         fi
         ;;
-    f|files)
+    F|files)
         OP='files'
         ;;
-    F|from)
+    f|from)
         OP='from'
         ;;
     c|clean)
@@ -247,6 +247,7 @@ _urpmi() {
         upgrade) $SUDO urpmi --auto-update;;
         search)  urpmq -Y $1;;
         show)    urpmq --summary $1;;
+files
         files)   rpm -ql "$@";;
         from)    rpm -qf "$@";;
         clean)   $SUDO urpme --auto-orphans;;
@@ -296,7 +297,7 @@ _slackpkg() {
         search)  slackpkg search $1;;
         show)    slackpkg info $1;;
         from)    slackpkg file-search "$@";;
-        files)   pem "unsupported because PM does not support it natively: should be added soon.";;
+        files)   pem "unsupported because PM does not support it natively: see CONTRUBITING.md.";;
         clean)   $SUDO slackpkg clean-system;;
     esac
 }
