@@ -247,7 +247,8 @@ _urpmi() {
         upgrade) $SUDO urpmi --auto-update;;
         search)  urpmq -Y $1;;
         show)    urpmq --summary $1;;
-        f*)      pem "unsupported due to PM being added mid-PR and gk being lazy; please see CONTRIBUTING.md";;
+        files)   rpm -ql "$@";;
+        from)    rpm -qf "$@";;
         clean)   $SUDO urpme --auto-orphans;;
     esac
 }
@@ -294,7 +295,8 @@ _slackpkg() {
         upgrade) $SUDO slackpkg upgrade-all;;
         search)  slackpkg search $1;;
         show)    slackpkg info $1;;
-        f*)      pem "unsupported due to PM being added mid-PR and gk being lazy; please see CONTRIBUTING.md";;
+        from)    slackpkg file-search "$@";;
+        files)   pem "unsupported because PM does not support it natively: see CONTRUBITING.md.";;
         clean)   $SUDO slackpkg clean-system;;
     esac
 }
