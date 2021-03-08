@@ -247,7 +247,6 @@ _urpmi() {
         upgrade) $SUDO urpmi --auto-update;;
         search)  urpmq -Y $1;;
         show)    urpmq --summary $1;;
-files
         files)   rpm -ql "$@";;
         from)    rpm -qf "$@";;
         clean)   $SUDO urpme --auto-orphans;;
