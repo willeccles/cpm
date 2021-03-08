@@ -320,7 +320,8 @@ _slackpkg() {
          upgrade) nix-env -u;;
          search)  nix-env -qa "$@";;
          show)    nix-env -qa --description "$@";;
-         f*)      pem "unsupported: this feature is functionally useless in this PM";;
+         f*)      pem "unsupported: this feature is\
+                  functionally useless in this PM";;
          clean)   nix-collect-garbage -d;;
      esac
  }
