@@ -301,6 +301,20 @@ _slackpkg() {
     esac
 }
 
+_guix() {
+    case "$OP" in
+        install) guix package --install "$@";;
+        remove)  guix package --remove "$@";;
+        list)    guix package --list-installed;;
+        count)   guix package --list-installed | tot;;
+        up*)     guix upgrade --keep-going;;
+        search)  guix search "$@";;
+        show)    guix show "$@";;
+        f*)      pem "unsupported: this feature is functionally useless in this PM";;
+        clean)   guix gc --delete-generations;;
+    esac
+}
+
  _nix() {
      case "$OP" in
          install) nix-env -iA "$@";;
@@ -346,6 +360,9 @@ elif has slackpkg; then
 elif has nix; then
     # global/nixos
     _nix "$@"
+elif has guix; then
+    # local (non-system-wide) guix
+    _guix "$@"
 elif has brew; then
     pem "Homebrew is not supported [wontfix]"
     exit 1
