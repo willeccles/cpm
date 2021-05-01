@@ -37,6 +37,7 @@ sudo install -m755 cpm /bin/cpm
 - dnf (Fedora)
 - MacPorts (MacOS)
 - nix (Global/NixOS)
+- guix (non-system-wide Guix)
 - pacman (Arch)
 - slackpkg (Slackware)
 - urpmi (Mageia)
