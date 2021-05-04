@@ -119,15 +119,14 @@ fcount() {
 # list files in a directory (similar to ls -l)
 flist() {
     if [ -d "$1" ]; then
-        cd "$1"
-        printf '%s\n' *
+        cd "$1" && printf '%s\n' *
     fi
 }
 
 # replacement for command -v which ignores aliases
 # this is useful for me, don't ask why
 has() {
-    case "$(command -v $1 2>/dev/null)" in
+    case "$(command -v "$1" 2>/dev/null)" in
         alias*|"") return 1
     esac
 }
@@ -205,37 +204,37 @@ _portage() {
     esac
 }
 
- _dnf() {
-     case "$OP" in
-         install) $SUDO dnf install "$@";;
-         remove)  $SUDO dnf remove "$@";;
-         list)    dnf list --installed;;
-         count)   rpm -qa | tot;;
-         update)  $SUDO dnf check-update;;
-         upgrade) $SUDO dnf distro-sync;;
-         search)  dnf search "$1";;
-         show)    dnf info "$1";;
-         files)   dnf repoquery -l "$@";;
-         from)    dnf provides "$@";;
-         clean)   $SUDO dnf autoremove;;
-     esac
- }
+_dnf() {
+    case "$OP" in
+        install) $SUDO dnf install "$@";;
+        remove)  $SUDO dnf remove "$@";;
+        list)    dnf list --installed;;
+        count)   rpm -qa | tot;;
+        update)  $SUDO dnf check-update;;
+        upgrade) $SUDO dnf distro-sync;;
+        search)  dnf search "$1";;
+        show)    dnf info "$1";;
+        files)   dnf repoquery -l "$@";;
+        from)    dnf provides "$@";;
+        clean)   $SUDO dnf autoremove;;
+    esac
+}
 
- _pacman() {
-     case "$OP" in
-         install) $SUDO pacman -S "$@";;
-         remove)  $SUDO pacman -Rs "$@";;
-         list)    pacman -Q;;
-         count)   pacman -Q | tot;;
-         update)  $SUDO pacman -Sy;;
-         upgrade) $SUDO pacman -Syu;;
-         search)  pacman -Ss $1;;
-         show)    pacman -Si $1;;
-         files)   pacman -Ql "$@";;
-         from)    pacman -Qo "$@";;
-         clean)   $SUDO pacman -Rns $(pacman -Qtdq) && $SUDO pacman -Sc;;
-     esac
- }
+_pacman() {
+    case "$OP" in
+        install) $SUDO pacman -S "$@";;
+        remove)  $SUDO pacman -Rs "$@";;
+        list)    pacman -Q;;
+        count)   pacman -Q | tot;;
+        update)  $SUDO pacman -Sy;;
+        upgrade) $SUDO pacman -Syu;;
+        search)  pacman -Ss $1;;
+        show)    pacman -Si $1;;
+        files)   pacman -Ql "$@";;
+        from)    pacman -Qo "$@";;
+        clean)   $SUDO pacman -Rns $(pacman -Qtdq) && $SUDO pacman -Sc;;
+    esac
+}
 
 _urpmi() {
     case "$OP" in
@@ -253,37 +252,37 @@ _urpmi() {
     esac
 }
 
- _macports() {
-     case "$OP" in
-         install) $SUDO port install -c "$@";;
-         remove)  $SUDO port uninstall --follow-dependencies "$@";;
-         list)    port installed;;
-         count)   port installed | tot;;
-         update)  $SUDO port sync;;
-         upgrade) $SUDO port selfupdate;;
-         search)  port search $1;;
-         show)    port info $1;;
-         files)   port contents "$@";;
-         from)    port provides "$@";;
-         clean)   $SUDO port reclaim;;
-     esac
- }
+_macports() {
+    case "$OP" in
+        install) $SUDO port install -c "$@";;
+        remove)  $SUDO port uninstall --follow-dependencies "$@";;
+        list)    port installed;;
+        count)   port installed | tot;;
+        update)  $SUDO port sync;;
+        upgrade) $SUDO port selfupdate;;
+        search)  port search $1;;
+        show)    port info $1;;
+        files)   port contents "$@";;
+        from)    port provides "$@";;
+        clean)   $SUDO port reclaim;;
+    esac
+}
 
- _xbps() {
-     case "$OP" in
-         install) $SUDO xbps-install "$@";;
-         remove)  $SUDO xbps-remove -R "$@";;
-         list)    xbps-query -l;;
-         count)   xbps-query -l | tot;;
-         update)  $SUDO xbps-install -S;;
-         upgrade) $SUDO xbps-install -Su xbps && $SUDO xbps-install -u;;
-         search)  xbps-query -s "$1" --repository;;
-         show)    xbps-query -S "$1" --repository;;
-         files)   xbps-query -f "$1" --repository;;
-         from)    xbps-query -o "$1" --repository;;
-         clean)   $SUDO xbps-remove -ROo;;
-     esac
- }
+_xbps() {
+    case "$OP" in
+        install) $SUDO xbps-install "$@";;
+        remove)  $SUDO xbps-remove -R "$@";;
+        list)    xbps-query -l;;
+        count)   xbps-query -l | tot;;
+        update)  $SUDO xbps-install -S;;
+        upgrade) $SUDO xbps-install -Su xbps && $SUDO xbps-install -u;;
+        search)  xbps-query -s "$1" --repository;;
+        show)    xbps-query -S "$1" --repository;;
+        files)   xbps-query -f "$1" --repository;;
+        from)    xbps-query -o "$1" --repository;;
+        clean)   $SUDO xbps-remove -ROo;;
+    esac
+}
 
 _slackpkg() {
     case "$OP" in
@@ -315,22 +314,26 @@ _guix() {
     esac
 }
 
- _nix() {
-     case "$OP" in
-         install) nix-env -iA "$@";;
-         remove)  niv-env -e "$@";;
-         list)    nix-env -q "$@";;
-         count)   nix-env -q | wc -l;;
-         update)  nix-channel --update;;
-         upgrade) nix-env -u;;
-         search)  nix-env -qa "$@";;
-         show)    nix-env -qa --description "$@";;
-         f*)      pem "unsupported: this feature is functionally useless in this PM";;
-         clean)   nix-collect-garbage -d;;
-     esac
- }
+_nix() {
+    case "$OP" in
+        install) nix-env -iA "$@";;
+        remove)  niv-env -e "$@";;
+        list)    nix-env -q "$@";;
+        count)   nix-env -q | wc -l;;
+        update)  nix-channel --update;;
+        upgrade) nix-env -u;;
+        search)  nix-env -qa "$@";;
+        show)    nix-env -qa --description "$@";;
+        f*)      pem "unsupported: this feature is functionally useless in this PM";;
+        clean)   nix-collect-garbage -d;;
+    esac
+}
 
-if   has apk; then
+# Use pm=PKG_MANAGER cpm COMMAND to force a specific cpm function
+# ie.: pm=portage cpm list
+if [ "$pm" ] && has "_$pm"; then
+  "_$pm" "$@"
+elif has apk; then
     # alpine/adelie
     _apk "$@"
 elif has apt; then
