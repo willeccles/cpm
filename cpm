@@ -119,15 +119,15 @@ fcount() {
 # list files in a directory (similar to ls -l)
 flist() {
     if [ -d "$1" ]; then
-        cd "$1"
-        printf '%s\n' *
+        cd "$1" || return
+        printf '%s\n' ./*
     fi
 }
 
 # replacement for command -v which ignores aliases
 # this is useful for me, don't ask why
 has() {
-    case "$(command -v $1 2>/dev/null)" in
+    case "$(command -v "$1" 2>/dev/null)" in
         alias*|"") return 1
     esac
 }
