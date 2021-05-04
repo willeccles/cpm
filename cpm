@@ -330,7 +330,11 @@ _nix() {
     esac
 }
 
-if   has apk; then
+# Use pm=PKG_MANAGER cpm COMMAND to force a specific cpm function
+# ie.: pm=portage cpm list
+if [ "$pm" ] && has "_$pm"; then
+  "_$pm" "$@"
+elif has apk; then
     # alpine/adelie
     _apk "$@"
 elif has apt; then
