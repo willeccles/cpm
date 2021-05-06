@@ -300,6 +300,22 @@ _slackpkg() {
     esac
 }
 
+_zypper() {
+    case "$OP" in
+        install) $SUDO zypper install "$@";;
+        remove)  $SUDO zypper remove -u "$@";;
+        list)    rpm -qa;;
+        count)   rpm -qa | tot;;
+        update)  $SUDO zypper refresh;;
+        upgrade) $SUDO zypper update;;
+        search)  zypper search "$@";;
+        show)    zypper info "$@";;
+        files)   rpm -ql "$@";;
+        from)    zypper search -f "$@";;
+        clean)   pem "unsupported: this feature is functionally useless in this PM";;
+    esac
+}
+
 _guix() {
     case "$OP" in
         install) guix package --install "$@";;
@@ -360,6 +376,9 @@ elif has xbps-install; then
 elif has slackpkg; then
     # slackware
     _slackpkg "$@"
+elif has zypper; then
+    # slackware
+    _zypper "$@"
 elif has nix; then
     # global/nixos
     _nix "$@"

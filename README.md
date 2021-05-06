@@ -42,6 +42,7 @@ sudo install -m755 cpm /bin/cpm
 - slackpkg (Slackware)
 - urpmi (Mageia)
 - xbps (Void)
+- zypper (OpenSUSE)
 
 ## Explicitly unsupported package managers
 
