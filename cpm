@@ -228,8 +228,8 @@ _pacman() {
         count)   pacman -Q | tot;;
         update)  $SUDO pacman -Sy;;
         upgrade) $SUDO pacman -Syu;;
-        search)  pacman -Ss $1;;
-        show)    pacman -Si $1;;
+        search)  pacman -Ss "$1";;
+        show)    pacman -Si "$1";;
         files)   pacman -Ql "$@";;
         from)    pacman -Qo "$@";;
         clean)   $SUDO pacman -Rns $(pacman -Qtdq) && $SUDO pacman -Sc;;
@@ -244,8 +244,8 @@ _urpmi() {
         count)   rpm -qa | tot;;
         update)  $SUDO urpmi.update -a;;
         upgrade) $SUDO urpmi --auto-update;;
-        search)  urpmq -Y $1;;
-        show)    urpmq --summary $1;;
+        search)  urpmq -Y "$1";;
+        show)    urpmq --summary "$1";;
         files)   rpm -ql "$@";;
         from)    rpm -qf "$@";;
         clean)   $SUDO urpme --auto-orphans;;
@@ -260,8 +260,8 @@ _macports() {
         count)   port installed | tot;;
         update)  $SUDO port sync;;
         upgrade) $SUDO port selfupdate;;
-        search)  port search $1;;
-        show)    port info $1;;
+        search)  port search "$1";;
+        show)    port info "$1";;
         files)   port contents "$@";;
         from)    port provides "$@";;
         clean)   $SUDO port reclaim;;
@@ -292,8 +292,8 @@ _slackpkg() {
         count)   fcount /var/log/packages/*;;
         update)  $SUDO slackpkg update gpg && slackpkg update;;
         upgrade) $SUDO slackpkg upgrade-all;;
-        search)  slackpkg search $1;;
-        show)    slackpkg info $1;;
+        search)  slackpkg search "$1";;
+        show)    slackpkg info "$1";;
         from)    slackpkg file-search "$@";;
         files)   pem "unsupported because PM does not support it natively: see CONTRUBITING.md.";;
         clean)   $SUDO slackpkg clean-system;;
@@ -335,7 +335,7 @@ _nix() {
         install) nix-env -iA "$@";;
         remove)  niv-env -e "$@";;
         list)    nix-env -q "$@";;
-        count)   nix-env -q | wc -l;;
+        count)   nix-env -q | tot;;
         update)  nix-channel --update;;
         upgrade) nix-env -u;;
         search)  nix-env -qa "$@";;
