@@ -322,7 +322,8 @@ _guix() {
         remove)  guix package --remove "$@";;
         list)    guix package --list-installed;;
         count)   guix package --list-installed | tot;;
-        up*)     guix upgrade --keep-going;;
+        update)  guix pull;;
+        upgrade) guix upgrade --keep-going;;
         search)  guix search "$@";;
         show)    guix show "$@";;
         f*)      pem "unsupported: this feature is functionally useless in this PM";;
