@@ -86,6 +86,7 @@ case "$1" in
         ;;
     *)
         pem "Unrecognized operation: $1"
+        usage
         exit 1
         ;;
 esac
