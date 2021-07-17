@@ -46,7 +46,13 @@ sudo install -m755 cpm /bin/cpm
 
 ## Explicitly unsupported package managers
 
+- Cargo
+- Flatpak
 - Homebrew
+- NPM
+- Pip
+- Snap
+- Yarn
 
 ## My package manager isn't supported!!1!!11!1
 
