@@ -6,7 +6,7 @@ To add your package manager to cpm, do the following:
    (or another editor which respects a vim modeline), there is a modeline to set
    indentation settings for you. If you are not, you should be using the
    following settings:
-    - Indent lines with 4 spaces (not tabs)
+    - Indent lines with 2 spaces (not tabs)
     - A line should be no longer than 80 characters unless absolutely necessary
 2. Add a function for the package manager. These should be kept in the same
    order as the conditionals at the end of the file.
