@@ -377,6 +377,9 @@ elif has guix; then
 elif has brew; then
   pem "Homebrew is not supported [wontfix]"
   exit 1
+elif has snap; then
+  pem "Snapd is not supported [wontfix]"
+  exit 1
 else
   pem "No valid package manager detected."
   exit 1
