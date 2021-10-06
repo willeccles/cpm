@@ -377,23 +377,8 @@ elif has guix; then
 elif has brew; then
   pem "Homebrew is not supported [wontfix]"
   exit 1
-elif has cargo; then
-  pem "Cargo is not supported [wontfix]"
-  exit 1
-elif has flatpak; then
-  pem "Flatpak is not supported [wontfix]"
-  exit 1
-elif has npm; then
-  pem "NPM is not supported [wontfix]"
-  exit 1
-elif has pip; then
-  pem "Pip is not supported [wontfix]"
-  exit 1
 elif has snap; then
   pem "Snapd is not supported [wontfix]"
-  exit 1
-elif has yarn; then
-  pem "Yarn is not supported [wontfix]"
   exit 1
 else
   pem "No valid package manager detected."
