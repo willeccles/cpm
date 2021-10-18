@@ -21,14 +21,6 @@ $ cpm [i|r|l|u|U|s|S|I|F|f|c|h] [pkg]...
 -> h|help    show this message
 ```
 
-## Installation
-```
-git clone https://github.com/willeccles/cpm.git
-cd cpm/
-sudo install -m755 cpm /bin/cpm
-# do whatever you want from here
-```
-
 ## Supported package managers
 
 - apk (Alpine/Adélie)
