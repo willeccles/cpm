@@ -166,6 +166,26 @@ elif [ "$(whoami)" != root ]; then
   SUDO='su root -c '\''"$@"'\'' -- -'
 fi
 
+# for slackware: impliment files
+# usage: slacklist zsh
+slacklist() {
+  pkginfo="/var/log/packages/$1"
+  if [ -f "$pkginfo" ];
+    unset found
+    while IFS= read -r line; do
+      [ "$line" = "FILE LIST:" ] && found=1
+      [ "$found" ] && printf "%s\n" "$line"
+    done <"$pkginfo"
+  else
+    if [ -d /var/log/packages ]
+      if [ -f "/var/log/packages/$1" ]
+        pem "Something unknown has gone wrong."
+      else pem "Not in \"/var/log/packages/\", check input or try updating."
+    else pem "\"/var/log/packages/\" does not exist, are you using slackpkg?"
+  fi
+}
+
+
 _apk() {
   case "$OP" in
     install) $SUDO apk add "$@";;
@@ -305,7 +325,7 @@ _slackpkg() {
     search)  slackpkg search "$@";;
     show)    slackpkg info "$@";;
     from)    slackpkg file-search "$@";;
-    files)   pem "unsupported because PM does not support it natively: see CONTRUBITING.md.";;
+    files)   slacklist "$1";;
     clean)   $SUDO slackpkg clean-system;;
   esac
 }
