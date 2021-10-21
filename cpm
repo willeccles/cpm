@@ -167,9 +167,9 @@ elif [ "$(whoami)" != root ]; then
 fi
 
 # mainly for slackware: list lines after string $3 in directory $2, file $1
-# usage: filelistftr pkgname /directory/example/ "String to look for"
+# usage: filelistftr pkgname /directory/example "String to look for"
 filelistftr() {
-  pkginfo="$2 $1"
+  pkginfo="$2/$1"
   if [ -f "$pkginfo" ]; then
     unset found
     while IFS= read -r line; do
@@ -323,7 +323,7 @@ _slackpkg() {
     search)  slackpkg search "$@";;
     show)    slackpkg info "$@";;
     from)    slackpkg file-search "$@";;
-    files)   filelistftr "$1" "/var/log/packages/" "FILE LIST:";;
+    files)   filelistftr "$1" "/var/log/packages" "FILE LIST:";;
     clean)   $SUDO slackpkg clean-system;;
   esac
 }
