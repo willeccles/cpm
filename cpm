@@ -166,22 +166,20 @@ elif [ "$(whoami)" != root ]; then
   SUDO='su root -c '\''"$@"'\'' -- -'
 fi
 
-# for slackware: impliment files
-# usage: slacklist zsh
-slacklist() {
-  pkginfo="/var/log/packages/$1"
-  if [ -f "$pkginfo" ];
+# mainly for slackware: impliment files
+# usage: filelistftr pkgname /directory/example/
+filelistftr() {
+  pkginfo="$2 $1"
+  if [ -f "$pkginfo" ]; then
     unset found
     while IFS= read -r line; do
       [ "$line" = "FILE LIST:" ] && found=1
       [ "$found" ] && printf "%s\n" "$line"
     done <"$pkginfo"
+  elif [ -d $2 ]; then
+    pem "Not in $2, check input or try updating."
   else
-    if [ -d /var/log/packages ]
-      if [ -f "/var/log/packages/$1" ]
-        pem "Something unknown has gone wrong."
-      else pem "Not in \"/var/log/packages/\", check input or try updating."
-    else pem "\"/var/log/packages/\" does not exist, are you using slackpkg?"
+    pem "$2 does not exist, are you using the right PM?"
   fi
 }
 
@@ -325,7 +323,7 @@ _slackpkg() {
     search)  slackpkg search "$@";;
     show)    slackpkg info "$@";;
     from)    slackpkg file-search "$@";;
-    files)   slacklist "$1";;
+    files)   filelistftr "$1" "/var/log/packages/";;
     clean)   $SUDO slackpkg clean-system;;
   esac
 }
