@@ -167,19 +167,22 @@ elif [ "$(whoami)" != root ]; then
 fi
 
 # mainly for slackware: list lines after string $3 in directory $2, file $1
-# usage: filelistftr pkgname /directory/example "String to look for"
+# usage: filelistftr FILE [DIR] [STR]
+
 filelistftr() {
-  pkginfo="$2/$1"
+dir="${2:-/var/log/packages}"
+str='${3:-"FILE LIST:"}'
+  pkginfo="$dir/$file"
   if [ -f "$pkginfo" ]; then
     unset found
     while IFS= read -r line; do
-      [ "$line" = "$3" ] && found=1
+      [ "$line" = "$str" ] && found=1
       [ "$found" ] && printf "%s\n" "$line"
     done <"$pkginfo"
-  elif [ -d $2 ]; then
-    pem "Not in $2, check input or try updating."
+  elif [ -d "$dir" ]; then
+    pem "Not in $dir, check input or try updating."
   else
-    pem "$2 does not exist, are you using the right PM?"
+    pem "$dir does not exist, are you using the right PM?"
   fi
 }
 
