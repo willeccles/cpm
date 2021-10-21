@@ -166,14 +166,14 @@ elif [ "$(whoami)" != root ]; then
   SUDO='su root -c '\''"$@"'\'' -- -'
 fi
 
-# mainly for slackware: impliment files
-# usage: filelistftr pkgname /directory/example/
+# mainly for slackware: list 
+# usage: filelistftr pkgname /directory/example/ "String to look for"
 filelistftr() {
   pkginfo="$2 $1"
   if [ -f "$pkginfo" ]; then
     unset found
     while IFS= read -r line; do
-      [ "$line" = "FILE LIST:" ] && found=1
+      [ "$line" = "$3" ] && found=1
       [ "$found" ] && printf "%s\n" "$line"
     done <"$pkginfo"
   elif [ -d $2 ]; then
@@ -323,7 +323,7 @@ _slackpkg() {
     search)  slackpkg search "$@";;
     show)    slackpkg info "$@";;
     from)    slackpkg file-search "$@";;
-    files)   filelistftr "$1" "/var/log/packages/";;
+    files)   filelistftr "$1" "/var/log/packages/" "FILE LIST:";;
     clean)   $SUDO slackpkg clean-system;;
   esac
 }
