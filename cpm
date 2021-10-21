@@ -171,9 +171,9 @@ fi
 # usage: filelistftr FILE [DIR] [STR]
 
 filelistftr() {
-  file="$(1)"
+  file="${1}"
   dir="${2:-/var/log/packages}"
-  str='${3:-"FILE LIST:"}'
+  str="${3:-"FILE LIST:"}"
   pkginfo="$dir/$file" 
   if [ -f "$pkginfo" ]; then
     unset found
