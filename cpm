@@ -166,7 +166,7 @@ elif [ "$(whoami)" != root ]; then
   SUDO='su root -c '\''"$@"'\'' -- -'
 fi
 
-# mainly for slackware: list 
+# mainly for slackware: list lines after string $3 in directory $2, file $1
 # usage: filelistftr pkgname /directory/example/ "String to look for"
 filelistftr() {
   pkginfo="$2 $1"
