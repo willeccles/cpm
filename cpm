@@ -168,10 +168,7 @@ fi
 
 # mainly for slackware: list lines after string $3 in directory $2, file $1
 # usage: filelistftr FILE [DIR] [STR]
-
 filelistftr() {
-dir="${2:-/var/log/packages}"
-str='${3:-"FILE LIST:"}'
   pkginfo="$dir/$file"
   if [ -f "$pkginfo" ]; then
     unset found
