@@ -32,6 +32,7 @@ $ cpm [i|r|l|u|U|s|S|I|F|f|c|h] [pkg]...
 - guix (non-system-wide Guix)
 - pacman (Arch)
 - slackpkg (Slackware)
+- sorcery (Source Mage)
 - urpmi (Mageia)
 - xbps (Void)
 - zypper (OpenSUSE)

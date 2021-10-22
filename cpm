@@ -353,6 +353,22 @@ _zypper() {
   esac
 }
 
+_sorcery() {
+  case "$OP" in
+    install) $SUDO cast "$@";;
+    remove)  $SUDO dispell "$@";;
+    list)    gaze installed;;
+    count)   gaze installed | tot;;
+    update)  $SUDO sorcery -u;;
+    upgrade) $SUDO sorcery -g;;
+    search)  gaze search "$@";;
+    show)    gaze what "$@";;
+    files)   gaze tablet spell-files "$@";;
+    from)    gaze from "$@";;
+    clean)   pem "unsupported: this feature is functionally useless in this PM";;
+  esac
+}
+
 _guix() {
   case "$OP" in
     install) guix package --install "$@";;
@@ -415,8 +431,11 @@ elif has slackpkg; then
   # slackware
   _slackpkg "$@"
 elif has zypper; then
-  # slackware
+  # opensuse
   _zypper "$@"
+elif has sorcery; then
+  # source mage
+  _sorcery "$@"
 elif has nix; then
   # global/nixos
   _nix "$@"
