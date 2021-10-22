@@ -383,6 +383,22 @@ _nix() {
   esac
 }
 
+_sorcery() {
+  case "$OP" in
+    install) $SUDO cast "$@";;
+    remove)  $SUDO dispell "$@";;
+    list)    gaze installed;;
+    count)   gaze installed | tot;;
+    update)  $SUDO sorcery -u;;
+    upgrade) $SUDO sorcery -g;;
+    search)  gaze search "$@";;
+    show)    gaze what "$@";;
+    files)   gaze tablet spell-files "$@";;
+    from)    gaze from "$@";;
+    clean)   pem "unsupported: this feature is functionally useless in this PM";;
+  esac
+}
+
 # Use pm=PKG_MANAGER cpm COMMAND to force a specific cpm function
 # ie.: pm=portage cpm list
 if [ "$pm" ] && has "_$pm"; then
@@ -423,6 +439,9 @@ elif has nix; then
 elif has guix; then
   # local (non-system-wide) guix
   _guix "$@"
+elif has sorcery; then
+  # source mage
+  _sorcery "$@"
 elif has brew; then
   pem "Homebrew is not supported [wontfix]"
   exit 1
