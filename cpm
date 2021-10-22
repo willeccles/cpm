@@ -353,6 +353,22 @@ _zypper() {
   esac
 }
 
+_sorcery() {
+  case "$OP" in
+    install) $SUDO cast "$@";;
+    remove)  $SUDO dispell "$@";;
+    list)    gaze installed;;
+    count)   gaze installed | tot;;
+    update)  $SUDO sorcery -u;;
+    upgrade) $SUDO sorcery -g;;
+    search)  gaze search "$@";;
+    show)    gaze what "$@";;
+    files)   gaze tablet spell-files "$@";;
+    from)    gaze from "$@";;
+    clean)   pem "unsupported: this feature is functionally useless in this PM";;
+  esac
+}
+
 _guix() {
   case "$OP" in
     install) guix package --install "$@";;
@@ -380,22 +396,6 @@ _nix() {
     show)    nix-env -qa --description "$@";;
     f*)      pem "unsupported: this feature is functionally useless in this PM";;
     clean)   nix-collect-garbage -d;;
-  esac
-}
-
-_sorcery() {
-  case "$OP" in
-    install) $SUDO cast "$@";;
-    remove)  $SUDO dispell "$@";;
-    list)    gaze installed;;
-    count)   gaze installed | tot;;
-    update)  $SUDO sorcery -u;;
-    upgrade) $SUDO sorcery -g;;
-    search)  gaze search "$@";;
-    show)    gaze what "$@";;
-    files)   gaze tablet spell-files "$@";;
-    from)    gaze from "$@";;
-    clean)   pem "unsupported: this feature is functionally useless in this PM";;
   esac
 }
 
@@ -433,15 +433,15 @@ elif has slackpkg; then
 elif has zypper; then
   # slackware
   _zypper "$@"
+elif has sorcery; then
+  # source mage
+  _sorcery "$@"
 elif has nix; then
   # global/nixos
   _nix "$@"
 elif has guix; then
   # local (non-system-wide) guix
   _guix "$@"
-elif has sorcery; then
-  # source mage
-  _sorcery "$@"
 elif has brew; then
   pem "Homebrew is not supported [wontfix]"
   exit 1
