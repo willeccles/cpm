@@ -369,6 +369,22 @@ _sorcery() {
   esac
 }
 
+_lunar() {
+  case "$OP" in
+    install) $SUDO lunar install "$@";;
+    remove)  $SUDO lunar remove "$@";;
+    list)    lvu installed;;
+    count)   lvu installed | tot;;
+    update)  $SUDO lunar renew;;
+    upgrade) $SUDO lunar update;;
+    search)  lvu search "$@";;
+    show)    lvu what "$@";;
+    files)   lvu where "$@";;
+    from)    lvu from "$@";;
+    clean)   $SUDO lunar prune;;
+  esac
+}
+
 _guix() {
   case "$OP" in
     install) guix package --install "$@";;
@@ -436,6 +452,9 @@ elif has zypper; then
 elif has sorcery; then
   # source mage
   _sorcery "$@"
+elif has lunar; then
+  # lunar linux
+  _lunar "$@"
 elif has nix; then
   # global/nixos
   _nix "$@"
