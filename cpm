@@ -384,21 +384,6 @@ _guix() {
   esac
 }
 
-_nix() {
-  case "$OP" in
-    install) nix-env -iA "$@";;
-    remove)  niv-env -e "$@";;
-    list)    nix-env -q "$@";;
-    count)   nix-env -q | tot;;
-    update)  nix-channel --update;;
-    upgrade) nix-env -u;;
-    search)  nix-env -qa "$@";;
-    show)    nix-env -qa --description "$@";;
-    f*)      pem "unsupported: this feature is functionally useless in this PM";;
-    clean)   nix-collect-garbage -d;;
-  esac
-}
-
 # Use pm=PKG_MANAGER cpm COMMAND to force a specific cpm function
 # ie.: pm=portage cpm list
 if [ "$pm" ] && has "_$pm"; then
@@ -436,9 +421,6 @@ elif has zypper; then
 elif has sorcery; then
   # source mage
   _sorcery "$@"
-elif has nix; then
-  # global/nixos
-  _nix "$@"
 elif has guix; then
   # local (non-system-wide) guix
   _guix "$@"

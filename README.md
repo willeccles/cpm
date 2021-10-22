@@ -28,7 +28,6 @@ $ cpm [i|r|l|u|U|s|S|I|F|f|c|h] [pkg]...
 - emerge (Gentoo)
 - dnf (Fedora)
 - MacPorts (MacOS)
-- nix (Global/NixOS)
 - guix (non-system-wide Guix)
 - pacman (Arch)
 - slackpkg (Slackware)
@@ -42,6 +41,7 @@ $ cpm [i|r|l|u|U|s|S|I|F|f|c|h] [pkg]...
 - Cargo
 - Flatpak
 - Homebrew
+- Nix
 - NPM
 - Pip
 - Snap
