@@ -431,7 +431,7 @@ elif has slackpkg; then
   # slackware
   _slackpkg "$@"
 elif has zypper; then
-  # slackware
+  # opensuse
   _zypper "$@"
 elif has sorcery; then
   # source mage
