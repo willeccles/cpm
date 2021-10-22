@@ -182,12 +182,9 @@ filelistftr() {
       [ "$line" = "$str" ] && found=1
       [ "$found" ] && printf "%s\n" "$line"
     done <"$pkginfo"
-  elif [ -d $2 ]; then
-    pem "Not in $2, check input or try updating."
   elif [ -d "$dir" ]; then
     pem "Not in $dir, check input or try updating."
   else
-    pem "$2 does not exist, are you using the right PM?"
     pem "$dir does not exist, are you using the right PM?"
   fi
 }
