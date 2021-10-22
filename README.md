@@ -25,9 +25,10 @@ $ cpm [i|r|l|u|U|s|S|I|F|f|c|h] [pkg]...
 
 - apk (Alpine/Adélie)
 - apt (Debian/Ubuntu)
+- pkgutils (CRUX)
 - emerge (Gentoo)
 - dnf (Fedora)
-- lunar (Lunar Linux)
+- lunar (Lunar)
 - MacPorts (MacOS)
 - guix (non-system-wide Guix)
 - pacman (Arch)
