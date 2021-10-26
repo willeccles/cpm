@@ -178,7 +178,6 @@ filelistftr() {
   if [ -f "$pkginfo" ]; then
     unset found
     while IFS= read -r line; do
-      [ "$line" = "$3" ] && found=1
       [ "$line" = "$str" ] && found=1
       [ "$found" ] && printf "%s\n" "$line"
     done <"$pkginfo"
