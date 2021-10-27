@@ -94,6 +94,7 @@ case "$1" in
     ;;
   f|from)
     OP='from'
+    [ -e "$2" ] || set -- from "$(command -v "$2")"
     ;;
   c|clean)
     OP='clean'
