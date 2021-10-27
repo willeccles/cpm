@@ -151,7 +151,9 @@ has() {
 # resolve symlinks in path to file (may or may not work for a directory, but
 # I doubt there's a need for that anyway)
 resolve() {
-  cd -P "${1%/*}" 2>/dev/null || PWD="${1%/*}"
+  p="${1%/*}"
+  [ "$p" = "$1" ] && p="."
+  cd -P "$p" 2>/dev/null || PWD="$p"
   printf '%s\n' "${PWD}/${1##*/}"
 }
 
