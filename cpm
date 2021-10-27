@@ -174,7 +174,7 @@ filelistftr() {
   file="${1}"
   dir="${2:-/var/log/packages}"
   str="${3:-"FILE LIST:"}"
-  pkginfo="$dir/$file" 
+  pkginfo="$dir/$file"
   if [ -f "$pkginfo" ]; then
     unset found
     while IFS= read -r line; do
