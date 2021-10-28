@@ -151,7 +151,9 @@ has() {
 # resolve symlinks in path to file (may or may not work for a directory, but
 # I doubt there's a need for that anyway)
 resolve() {
-  cd -P "${1%/*}" 2>/dev/null || PWD="${1%/*}"
+  p="${1%/*}"
+  [ "$p" = "$1" ] && p="."
+  cd -P "$p" 2>/dev/null || PWD="$p"
   printf '%s\n' "${PWD}/${1##*/}"
 }
 
@@ -174,7 +176,7 @@ filelistftr() {
   file="${1}"
   dir="${2:-/var/log/packages}"
   str="${3:-"FILE LIST:"}"
-  pkginfo="$dir/$file" 
+  pkginfo="$dir/$file"
   if [ -f "$pkginfo" ]; then
     unset found
     while IFS= read -r line; do
