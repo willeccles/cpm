@@ -28,7 +28,7 @@ $ cpm [i|r|l|u|U|s|S|I|F|f|c|h] [pkg]...
 - emerge (Gentoo)
 - dnf (Fedora)
 - lunar (Lunar Linux)
-- MacPorts (MacOS)
+- MacPorts (macOS)
 - guix (non-system-wide Guix)
 - pacman (Arch)
 - slackpkg (Slackware)
