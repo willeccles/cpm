@@ -403,52 +403,58 @@ _guix() {
 # ie.: pm=portage cpm list
 if [ "$pm" ] && has "_$pm"; then
   "_$pm" "$@"
-elif has apk; then
-  # alpine/adelie
-  _apk "$@"
-elif has apt; then
-  # debian/ubuntu
-  _apt "$@"
-elif has emerge; then
-  # gentoo
-  _portage "$@"
-elif has dnf; then
-  # fedora
-  _dnf "$@"
-elif has pacman-key; then
-  # arch/manjaro
-  _pacman "$@"
-elif has urpmi; then
-  # mageia
-  _urpmi "$@"
-elif has port; then
-  # macos
-  _macports "$@"
-elif has xbps-install; then
-  # void
-  _xbps "$@"
-elif has slackpkg; then
-  # slackware
-  _slackpkg "$@"
-elif has zypper; then
-  # opensuse
-  _zypper "$@"
-elif has sorcery; then
-  # source mage
-  _sorcery "$@"
-elif has lunar; then
-  # lunar linux
-  _lunar "$@"
-elif has guix; then
-  # local (non-system-wide) guix
-  _guix "$@"
-elif has brew; then
-  pem "Homebrew is not supported [wontfix]"
-  exit 1
-elif has snap; then
-  pem "Snapd is not supported [wontfix]"
-  exit 1
+elif ! [ "$(uname -s)" = "Darwin" ]; then
+  if has apk; then
+    # alpine/adelie
+    _apk "$@"
+  elif has apt; then
+    # debian/ubuntu
+    _apt "$@"
+  elif has emerge; then
+    # gentoo
+    _portage "$@"
+  elif has dnf; then
+    # fedora
+    _dnf "$@"
+  elif has pacman-key; then
+    # arch/manjaro
+    _pacman "$@"
+  elif has urpmi; then
+    # mageia
+    _urpmi "$@"
+  elif has xbps-install; then
+    # void
+    _xbps "$@"
+  elif has slackpkg; then
+    # slackware
+    _slackpkg "$@"
+  elif has zypper; then
+    # opensuse
+    _zypper "$@"
+  elif has sorcery; then
+    # source mage
+    _sorcery "$@"
+  elif has lunar; then
+    # lunar linux
+    _lunar "$@"
+  elif has guix; then
+    # local (non-system-wide) guix
+    _guix "$@"
+  elif has snap; then
+    pem "Snapd is not supported [wontfix]"
+    exit 1
+  else
+    pem "No valid package manager detected."
+    exit 1
+  fi
 else
-  pem "No valid package manager detected."
-  exit 1
+  if has port; then
+    _macports "$@"
+  elif has brew; then
+    pem "Homebrew is not supported [wontfix]"
+    exit 1
+  else
+    pem "No valid package manager detected."
+    exit 1
+  fi
 fi
