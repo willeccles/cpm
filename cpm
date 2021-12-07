@@ -180,7 +180,6 @@ filelistftr() {
   if [ -f "$pkginfo" ]; then
     unset found
     while IFS= read -r line; do
-      [ "$line" = "$3" ] && found=1
       [ "$line" = "$str" ] && found=1
       [ "$found" ] && printf "%s\n" "$line"
     done <"$pkginfo"
@@ -384,6 +383,22 @@ _lunar() {
   esac
 }
 
+_crux() {
+  case "$OP" in
+    install) prt-get install "$@";;
+    remove)  prt-get remove "$@";;
+    list)    prt-get listinst;;
+    count)   prt-get listinst | tot;;
+    update)  prt-get update "$@";;
+    upgrade) prt-get sysup;;
+    search)  prt-get search "$@";;
+    show)    prt-get info "$@";;
+    files)   prt-get ls "$@";;
+    from)    prt-get fsearch "$@";;
+    clean)   prt-get cache && pkgfoster;;
+  esac
+}
+
 _guix() {
   case "$OP" in
     install) guix package --install "$@";;
@@ -435,8 +450,11 @@ elif ! [ "$(uname -s)" = "Darwin" ]; then
     # source mage
     _sorcery "$@"
   elif has lunar; then
-    # lunar linux
+    # lunar
     _lunar "$@"
+elif has prt-get; then
+    # crux
+    _crux "$@"
   elif has guix; then
     # local (non-system-wide) guix
     _guix "$@"
