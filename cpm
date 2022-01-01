@@ -294,7 +294,7 @@ _macports() {
     list)    port installed;;
     count)   port installed | tot;;
     update)  $SUDO port sync;;
-    upgrade) $SUDO port selfupdate;;
+    upgrade) $SUDO port selfupdate && $SUDO port upgrade outdated;;
     search)  port search "$@";;
     show)    port info "$@";;
     files)   port contents "$@";;
