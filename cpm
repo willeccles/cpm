@@ -452,7 +452,7 @@ elif ! [ "$(uname -s)" = "Darwin" ]; then
   elif has lunar; then
     # lunar
     _lunar "$@"
-elif has prt-get; then
+  elif has prt-get; then
     # crux
     _crux "$@"
   elif has guix; then
