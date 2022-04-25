@@ -246,7 +246,7 @@ _dnf() {
     list)    dnf list --installed;;
     count)   rpm -qa | tot;;
     update)  $SUDO dnf check-update;;
-    upgrade) $SUDO dnf distro-sync;;
+    upgrade) $SUDO dnf check-update && $SUDO dnf distro-sync;;
     search)  dnf search "$@";;
     show)    dnf info "$@";;
     files)   dnf repoquery -l "$@";;
