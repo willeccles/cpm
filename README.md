@@ -11,7 +11,7 @@ $ cpm [i|r|l|u|U|s|S|I|F|f|c|h] [pkg]...
 -> l|list    list installed packages
 -> C|count   count installed packages
 -> u|update  update package lists
--> U|upgrade upgrade all packages
+-> U|upgrade update package lists and upgrade all packages
 -> s|search  search for a package
 -> S|show    show information about a package
 -> I|info    same as show
