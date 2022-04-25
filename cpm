@@ -363,7 +363,7 @@ _sorcery() {
     list)    gaze installed;;
     count)   gaze installed | tot;;
     update)  $SUDO sorcery -u;;
-    upgrade) $SUDO sorcery -g;;
+    upgrade) $SUDO sorcery -ug;;
     search)  gaze search "$@";;
     show)    gaze what "$@";;
     files)   gaze tablet spell-files "$@";;
