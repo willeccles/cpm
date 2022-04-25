@@ -198,7 +198,7 @@ _apk() {
     list)    apk -vv info;;
     count)   apk -vv info | tot;;
     update)  $SUDO apk update;;
-    upgrade) $SUDO apk upgrade;;
+    upgrade) $SUDO apk update && $SUDO apk upgrade;;
     search)  apk search -v "$@";;
     show)    apk search "$@";;
     from)    apk info --who-owns "$@";;
