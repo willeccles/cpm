@@ -214,7 +214,7 @@ _apt() {
     list)    apt list --installed;;
     count)   dpkg-query -f '.\n' -W | tot;;
     update)  $SUDO apt update;;
-    upgrade) $SUDO apt dist-upgrade;;
+    upgrade) $SUDO apt update && $SUDO apt dist-upgrade;;
     search)  apt search "$@";;
     show)    apt show "$@";;
     files)   dpkg -L "$@";;
