@@ -34,7 +34,7 @@ usage() {
   phi l  "list   " "list installed packages"
   phi C  "count  " "count installed packages"
   phi u  "update " "update package lists"
-  phi U  "upgrade" "upgrade all packages"
+  phi U  "upgrade" "update package lists and upgrade all packages"
   phi s  "search " "search for a package"
   phi S  "show   " "show information about a package"
   phi I  "info   " "same as show"
