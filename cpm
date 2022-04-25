@@ -347,7 +347,7 @@ _zypper() {
     list)    rpm -qa;;
     count)   rpm -qa | tot;;
     update)  $SUDO zypper refresh;;
-    upgrade) $SUDO zypper update;;
+    upgrade) $SUDO zypper refresh && $SUDO zypper update;;
     search)  zypper search "$@";;
     show)    zypper info "$@";;
     files)   rpm -ql "$@";;
