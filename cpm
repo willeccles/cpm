@@ -327,8 +327,11 @@ _slackpkg() {
     remove)  $SUDO slackpkg remove "$@";;
     list)    flist /var/log/packages;;
     count)   fcount /var/log/packages/*;;
-    update)  $SUDO slackpkg update gpg && slackpkg update;;
-    upgrade) $SUDO slackpkg upgrade-all;;
+    update)  $SUDO slackpkg update gpg && $SUDO slackpkg update;;
+    upgrade)
+      $SUDO slackpkg update gpg && $SUDO slackpkg update && \
+        $SUDO slackpkg upgrade-all
+      ;;
     search)  slackpkg search "$@";;
     show)    slackpkg info "$@";;
     from)    slackpkg file-search "$@";;
