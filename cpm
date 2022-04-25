@@ -383,7 +383,7 @@ _lunar() {
   esac
 }
 
-_crux() {
+_prt_get() {
   case "$OP" in
     install) prt-get install "$@";;
     remove)  prt-get remove "$@";;
@@ -454,7 +454,7 @@ elif ! [ "$(uname -s)" = "Darwin" ]; then
     _lunar "$@"
   elif has prt-get; then
     # crux
-    _crux "$@"
+    _prt_get "$@"
   elif has guix; then
     # local (non-system-wide) guix
     _guix "$@"
