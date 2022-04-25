@@ -379,7 +379,7 @@ _lunar() {
     list)    lvu installed;;
     count)   lvu installed | tot;;
     update)  $SUDO lunar renew;;
-    upgrade) $SUDO lunar update;;
+    upgrade) $SUDO lunar renew && $SUDO lunar update;;
     search)  lvu search "$@";;
     show)    lvu what "$@";;
     files)   lvu where "$@";;
