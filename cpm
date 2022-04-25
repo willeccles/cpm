@@ -278,7 +278,7 @@ _urpmi() {
     list)    rpm -qa;;
     count)   rpm -qa | tot;;
     update)  $SUDO urpmi.update -a;;
-    upgrade) $SUDO urpmi --auto-update;;
+    upgrade) $SUDO urpmi.update -a && $SUDO urpmi --auto-update;;
     search)  urpmq -Y "$@";;
     show)    urpmq --summary "$@";;
     files)   rpm -ql "$@";;
