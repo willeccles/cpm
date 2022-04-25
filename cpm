@@ -411,7 +411,7 @@ _guix() {
     list)    guix package --list-installed;;
     count)   guix package --list-installed | tot;;
     update)  guix pull;;
-    upgrade) guix upgrade --keep-going;;
+    upgrade) guix pull && guix upgrade --keep-going;;
     search)  guix search "$@";;
     show)    guix show "$@";;
     f*)      pem "unsupported: this feature is functionally useless in this PM";;
