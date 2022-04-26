@@ -230,7 +230,10 @@ _portage() {
     list)    qlist -IRv;;
     count)   eix --world | tot;;
     update)  $SUDO emerge --sync;;
-    upgrade) $SUDO emerge -uDU --keep-going --with-bdeps=y @world;;
+    upgrade)
+      $SUDO emerge --sync && \
+        $SUDO emerge -uDU --keep-going --with-bdeps=y @world
+      ;;
     search)  emerge -s "$@";;
     show)    emerge -s "$@";;
     files)   qlist "$@";;
