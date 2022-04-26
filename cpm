@@ -385,17 +385,17 @@ _lunar() {
 
 _prt_get() {
   case "$OP" in
-    install) prt-get install "$@";;
-    remove)  prt-get remove "$@";;
+    install) $SUDO prt-get install "$@";;
+    remove)  $SUDO prt-get remove "$@";;
     list)    prt-get listinst;;
     count)   prt-get listinst | tot;;
-    update)  prt-get update "$@";;
-    upgrade) prt-get sysup;;
+    update)  $SUDO prt-get update "$@";;
+    upgrade) $SUDO prt-get sysup;;
     search)  prt-get search "$@";;
     show)    prt-get info "$@";;
     files)   prt-get ls "$@";;
     from)    prt-get fsearch "$@";;
-    clean)   prt-get cache && pkgfoster;;
+    clean)   $SUDO prt-get cache && pkgfoster;;
   esac
 }
 
