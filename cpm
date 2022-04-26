@@ -34,7 +34,7 @@ usage() {
   phi l  "list   " "list installed packages"
   phi C  "count  " "count installed packages"
   phi u  "update " "update package lists"
-  phi U  "upgrade" "upgrade all packages"
+  phi U  "upgrade" "update package lists and upgrade all packages"
   phi s  "search " "search for a package"
   phi S  "show   " "show information about a package"
   phi I  "info   " "same as show"
@@ -198,7 +198,7 @@ _apk() {
     list)    apk -vv info;;
     count)   apk -vv info | tot;;
     update)  $SUDO apk update;;
-    upgrade) $SUDO apk upgrade;;
+    upgrade) $SUDO apk update && $SUDO apk upgrade;;
     search)  apk search -v "$@";;
     show)    apk search "$@";;
     from)    apk info --who-owns "$@";;
@@ -214,7 +214,7 @@ _apt() {
     list)    apt list --installed;;
     count)   dpkg-query -f '.\n' -W | tot;;
     update)  $SUDO apt update;;
-    upgrade) $SUDO apt dist-upgrade;;
+    upgrade) $SUDO apt update && $SUDO apt dist-upgrade;;
     search)  apt search "$@";;
     show)    apt show "$@";;
     files)   dpkg -L "$@";;
@@ -230,7 +230,10 @@ _portage() {
     list)    qlist -IRv;;
     count)   eix --world | tot;;
     update)  $SUDO emerge --sync;;
-    upgrade) $SUDO emerge -uDU --keep-going --with-bdeps=y @world;;
+    upgrade)
+      $SUDO emerge --sync && \
+        $SUDO emerge -uDU --keep-going --with-bdeps=y @world
+      ;;
     search)  emerge -s "$@";;
     show)    emerge -s "$@";;
     files)   qlist "$@";;
@@ -246,7 +249,7 @@ _dnf() {
     list)    dnf list --installed;;
     count)   rpm -qa | tot;;
     update)  $SUDO dnf check-update;;
-    upgrade) $SUDO dnf distro-sync;;
+    upgrade) $SUDO dnf check-update && $SUDO dnf distro-sync;;
     search)  dnf search "$@";;
     show)    dnf info "$@";;
     files)   dnf repoquery -l "$@";;
@@ -278,7 +281,7 @@ _urpmi() {
     list)    rpm -qa;;
     count)   rpm -qa | tot;;
     update)  $SUDO urpmi.update -a;;
-    upgrade) $SUDO urpmi --auto-update;;
+    upgrade) $SUDO urpmi.update -a && $SUDO urpmi --auto-update;;
     search)  urpmq -Y "$@";;
     show)    urpmq --summary "$@";;
     files)   rpm -ql "$@";;
@@ -294,7 +297,9 @@ _macports() {
     list)    port installed;;
     count)   port installed | tot;;
     update)  $SUDO port sync;;
-    upgrade) $SUDO port selfupdate && $SUDO port upgrade outdated;;
+    upgrade)
+      $SUDO port sync && $SUDO port selfupdate && $SUDO port upgrade outdated
+      ;;
     search)  port search "$@";;
     show)    port info "$@";;
     files)   port contents "$@";;
@@ -325,8 +330,11 @@ _slackpkg() {
     remove)  $SUDO slackpkg remove "$@";;
     list)    flist /var/log/packages;;
     count)   fcount /var/log/packages/*;;
-    update)  $SUDO slackpkg update gpg && slackpkg update;;
-    upgrade) $SUDO slackpkg upgrade-all;;
+    update)  $SUDO slackpkg update gpg && $SUDO slackpkg update;;
+    upgrade)
+      $SUDO slackpkg update gpg && $SUDO slackpkg update && \
+        $SUDO slackpkg upgrade-all
+      ;;
     search)  slackpkg search "$@";;
     show)    slackpkg info "$@";;
     from)    slackpkg file-search "$@";;
@@ -342,7 +350,7 @@ _zypper() {
     list)    rpm -qa;;
     count)   rpm -qa | tot;;
     update)  $SUDO zypper refresh;;
-    upgrade) $SUDO zypper update;;
+    upgrade) $SUDO zypper refresh && $SUDO zypper update;;
     search)  zypper search "$@";;
     show)    zypper info "$@";;
     files)   rpm -ql "$@";;
@@ -358,7 +366,7 @@ _sorcery() {
     list)    gaze installed;;
     count)   gaze installed | tot;;
     update)  $SUDO sorcery -u;;
-    upgrade) $SUDO sorcery -g;;
+    upgrade) $SUDO sorcery -ug;;
     search)  gaze search "$@";;
     show)    gaze what "$@";;
     files)   gaze tablet spell-files "$@";;
@@ -374,7 +382,7 @@ _lunar() {
     list)    lvu installed;;
     count)   lvu installed | tot;;
     update)  $SUDO lunar renew;;
-    upgrade) $SUDO lunar update;;
+    upgrade) $SUDO lunar renew && $SUDO lunar update;;
     search)  lvu search "$@";;
     show)    lvu what "$@";;
     files)   lvu where "$@";;
@@ -389,8 +397,8 @@ _prt_get() {
     remove)  $SUDO prt-get remove "$@";;
     list)    prt-get listinst;;
     count)   prt-get listinst | tot;;
-    update)  $SUDO prt-get update "$@";;
-    upgrade) $SUDO prt-get sysup;;
+    update)  $SUDO ports -u;;
+    upgrade) $SUDO ports -u && $SUDO prt-get sysup;;
     search)  prt-get search "$@";;
     show)    prt-get info "$@";;
     files)   prt-get ls "$@";;
@@ -406,7 +414,7 @@ _guix() {
     list)    guix package --list-installed;;
     count)   guix package --list-installed | tot;;
     update)  guix pull;;
-    upgrade) guix upgrade --keep-going;;
+    upgrade) guix pull && guix upgrade --keep-going;;
     search)  guix search "$@";;
     show)    guix show "$@";;
     f*)      pem "unsupported: this feature is functionally useless in this PM";;
