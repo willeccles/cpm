@@ -394,8 +394,8 @@ _prt_get() {
     remove)  $SUDO prt-get remove "$@";;
     list)    prt-get listinst;;
     count)   prt-get listinst | tot;;
-    update)  $SUDO prt-get update "$@";;
-    upgrade) $SUDO prt-get sysup;;
+    update)  $SUDO ports -u;;
+    upgrade) $SUDO ports -u && $SUDO prt-get sysup;;
     search)  prt-get search "$@";;
     show)    prt-get info "$@";;
     files)   prt-get ls "$@";;
