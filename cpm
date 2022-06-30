@@ -255,8 +255,6 @@ _dnf() {
     files)   dnf repoquery -l "$@";;
     from)    dnf provides "$@";;
     clean)   $SUDO dnf autoremove && $SUDO dnf clean all;;
-    # removes everything dnf cached along orphans
-  
   esac
 }
 
