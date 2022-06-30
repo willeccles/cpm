@@ -248,13 +248,13 @@ _dnf() {
     remove)  $SUDO dnf remove "$@";;
     list)    dnf list --installed;;
     count)   rpm -qa | tot;;
-    update)  $SUDO dnf check-update;;
-    upgrade) $SUDO dnf check-update && $SUDO dnf distro-sync;;
+    update)  echo "DNF does not support this option.";;
+    upgrade) $SUDO dnf upgrade;;
     search)  dnf search "$@";;
     show)    dnf info "$@";;
     files)   dnf repoquery -l "$@";;
     from)    dnf provides "$@";;
-    clean)   $SUDO dnf autoremove;;
+    clean)   $SUDO dnf autoremove && $SUDO dnf clean all;;
   esac
 }
 
