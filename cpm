@@ -248,7 +248,7 @@ _dnf() {
     remove)  $SUDO dnf remove "$@";;
     list)    dnf list --installed;;
     count)   rpm -qa | tot;;
-    update)  echo "DNF does not support this option.";;
+    update)  $SUDO dnf check-update;;
     upgrade) $SUDO dnf upgrade;;
     search)  dnf search "$@";;
     show)    dnf info "$@";;
