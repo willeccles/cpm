@@ -37,6 +37,7 @@ $ cpm [i|r|l|u|U|s|S|I|F|f|c|h] [pkg]...
 - urpmi (Mageia)
 - xbps (Void)
 - zypper (OpenSUSE)
+- pkg (OpenBSD)
 
 ## Explicitly unsupported package managers
 

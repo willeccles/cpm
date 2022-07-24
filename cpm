@@ -422,6 +422,22 @@ _guix() {
   esac
 }
 
+_pkg_() {
+  case "$OP" in
+    install) $SUDO pkg_add "$@";;
+    remove) $SUDO pkg_delete "$@";;
+    list) pkg_info -v;;
+    count) pkg_info -v | tot;;
+    update) pem "unsupported: repo list only changes when user performs sys upgrade";;
+    upgrade) $SUDO pkg_add -u;;
+    search) pkg_info "$@";;
+    show) pkg_info "$@";;
+    files) pkg_info -L "$@";;
+    from) pkg_info -qE "$@";;
+    clean) pem "unsupported: PM already does this";;
+  esac
+}
+
 # Use pm=PKG_MANAGER cpm COMMAND to force a specific cpm function
 # ie.: pm=portage cpm list
 if [ "$pm" ] && has "_$pm"; then
@@ -466,6 +482,9 @@ elif ! [ "$(uname -s)" = "Darwin" ]; then
   elif has guix; then
     # local (non-system-wide) guix
     _guix "$@"
+  elif has pkg_info; then
+    # openbsd
+    _pkg_ "$@"
   elif has snap; then
     pem "Snapd is not supported [wontfix]"
     exit 1
