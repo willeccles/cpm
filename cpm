@@ -157,16 +157,20 @@ resolve() {
   printf '%s\n' "${PWD}/${1##*/}"
 }
 
-# figure out which sudo command to use
-# this is somewhat based on how xtools does it (for xi, specifically)
-SUDO=
-if command -v sudo >/dev/null; then
-  SUDO=sudo
-elif command -v doas >/dev/null && [ -f /etc/doas.conf ]; then
-  SUDO=doas
-elif [ "$(id -u)" != 0 ]; then
-  SUDO='su root -c '\''"$@"'\'' -- -'
-fi
+# elevate permissions and execute a command
+su_do() {
+  if [ "$(id -u)" != 0 ]; then
+    if command -v sudo >/dev/null; then
+      sudo "$@"
+    elif command -v doas >/dev/null && [ -f /etc/doas.conf ]; then
+      doas "$@"
+    else
+      su root -c '"$@"' -- sh "$@"
+    fi
+  else
+    "$@"
+  fi
+}
 
 # mainly for slackware: list lines after string $3 in directory $2, file $1
 # usage: filelistftr pkgname /directory/example "String to look for"
@@ -193,164 +197,164 @@ filelistftr() {
 
 _apk() {
   case "$OP" in
-    install) $SUDO apk add "$@";;
-    remove)  $SUDO apk del "$@";;
+    install) su_do apk add "$@";;
+    remove)  su_do apk del "$@";;
     list)    apk -vv info;;
     count)   apk -vv info | tot;;
-    update)  $SUDO apk update;;
-    upgrade) $SUDO apk update && $SUDO apk upgrade;;
+    update)  su_do apk update;;
+    upgrade) su_do apk update && su_do apk upgrade;;
     search)  apk search -v "$@";;
     show)    apk search "$@";;
     from)    apk info --who-owns "$@";;
     files)   apk info -L "$@";;
-    clean)   $SUDO apk cache clean;;
+    clean)   su_do apk cache clean;;
   esac
 }
 
 _apt() {
   case "$OP" in
-    install) $SUDO apt install "$@";;
-    remove)  $SUDO apt remove "$@";;
+    install) su_do apt install "$@";;
+    remove)  su_do apt remove "$@";;
     list)    apt list --installed;;
     count)   dpkg-query -f '.\n' -W | tot;;
-    update)  $SUDO apt update;;
-    upgrade) $SUDO apt update && $SUDO apt dist-upgrade;;
+    update)  su_do apt update;;
+    upgrade) su_do apt update && su_do apt dist-upgrade;;
     search)  apt search "$@";;
     show)    apt show "$@";;
     files)   dpkg -L "$@";;
     from)    dpkg -S "$@";;
-    clean)   $SUDO apt autoremove;;
+    clean)   su_do apt autoremove;;
   esac
 }
 
 _portage() {
   case "$OP" in
-    install) $SUDO emerge -atv "$@";;
-    remove)  $SUDO emerge -avc "$@";;
+    install) su_do emerge -atv "$@";;
+    remove)  su_do emerge -avc "$@";;
     list)    qlist -IRv;;
     count)   eix --world | tot;;
-    update)  $SUDO emerge --sync;;
+    update)  su_do emerge --sync;;
     upgrade)
-      $SUDO emerge --sync && \
-        $SUDO emerge -uDU --keep-going --with-bdeps=y @world
+      su_do emerge --sync && \
+        su_do emerge -uDU --keep-going --with-bdeps=y @world
       ;;
     search)  emerge -s "$@";;
     show)    emerge -s "$@";;
     files)   qlist "$@";;
     from)    qfile "$@";;
-    clean)   $SUDO emerge --depclean -v;;
+    clean)   su_do emerge --depclean -v;;
   esac
 }
 
 _dnf() {
   case "$OP" in
-    install) $SUDO dnf install "$@";;
-    remove)  $SUDO dnf remove "$@";;
+    install) su_do dnf install "$@";;
+    remove)  su_do dnf remove "$@";;
     list)    dnf list --installed;;
     count)   rpm -qa | tot;;
-    update)  $SUDO dnf check-update;;
-    upgrade) $SUDO dnf upgrade;;
+    update)  su_do dnf check-update;;
+    upgrade) su_do dnf upgrade;;
     search)  dnf search "$@";;
     show)    dnf info "$@";;
     files)   dnf repoquery -l "$@";;
     from)    dnf provides "$@";;
-    clean)   $SUDO dnf autoremove && $SUDO dnf clean all;;
+    clean)   su_do dnf autoremove && su_do dnf clean all;;
   esac
 }
 
 _pacman() {
   case "$OP" in
-    install) $SUDO pacman -S "$@";;
-    remove)  $SUDO pacman -Rs "$@";;
+    install) su_do pacman -S "$@";;
+    remove)  su_do pacman -Rs "$@";;
     list)    pacman -Q;;
     count)   pacman -Q | tot;;
-    update)  $SUDO pacman -Sy;;
-    upgrade) $SUDO pacman -Syu;;
+    update)  su_do pacman -Sy;;
+    upgrade) su_do pacman -Syu;;
     search)  pacman -Ss "$@";;
     show)    pacman -Si "$@";;
     files)   pacman -Ql "$@";;
     from)    pacman -Qo "$@";;
-    clean)   $SUDO pacman -Rns $(pacman -Qtdq) && $SUDO pacman -Sc;;
+    clean)   su_do pacman -Rns $(pacman -Qtdq) && su_do pacman -Sc;;
   esac
 }
 
 _urpmi() {
   case "$OP" in
-    install) $SUDO urpmi "$@";;
-    remove)  $SUDO urpme "$@";;
+    install) su_do urpmi "$@";;
+    remove)  su_do urpme "$@";;
     list)    rpm -qa;;
     count)   rpm -qa | tot;;
-    update)  $SUDO urpmi.update -a;;
-    upgrade) $SUDO urpmi.update -a && $SUDO urpmi --auto-update;;
+    update)  su_do urpmi.update -a;;
+    upgrade) su_do urpmi.update -a && su_do urpmi --auto-update;;
     search)  urpmq -Y "$@";;
     show)    urpmq --summary "$@";;
     files)   rpm -ql "$@";;
     from)    rpm -qf "$@";;
-    clean)   $SUDO urpme --auto-orphans;;
+    clean)   su_do urpme --auto-orphans;;
   esac
 }
 
 _macports() {
   case "$OP" in
-    install) $SUDO port install -c "$@";;
-    remove)  $SUDO port uninstall --follow-dependencies "$@";;
+    install) su_do port install -c "$@";;
+    remove)  su_do port uninstall --follow-dependencies "$@";;
     list)    port installed;;
     count)   port installed | tot;;
-    update)  $SUDO port sync;;
+    update)  su_do port sync;;
     upgrade)
-      $SUDO port sync && $SUDO port selfupdate && $SUDO port upgrade outdated
+      su_do port sync && su_do port selfupdate && su_do port upgrade outdated
       ;;
     search)  port search "$@";;
     show)    port info "$@";;
     files)   port contents "$@";;
     from)    port provides "$@";;
-    clean)   $SUDO port reclaim;;
+    clean)   su_do port reclaim;;
   esac
 }
 
 _xbps() {
   case "$OP" in
-    install) $SUDO xbps-install "$@";;
-    remove)  $SUDO xbps-remove -R "$@";;
+    install) su_do xbps-install "$@";;
+    remove)  su_do xbps-remove -R "$@";;
     list)    xbps-query -l;;
     count)   xbps-query -l | tot;;
-    update)  $SUDO xbps-install -S;;
-    upgrade) $SUDO xbps-install -Su xbps && $SUDO xbps-install -Su;;
+    update)  su_do xbps-install -S;;
+    upgrade) su_do xbps-install -Su xbps && su_do xbps-install -Su;;
     search)  xbps-query -s "$@" --repository;;
     show)    xbps-query -S "$@" --repository;;
     files)   xbps-query -f "$1" --repository;;
     from)    xbps-query -o "$(resolve "$1")";;
-    clean)   $SUDO xbps-remove -ROo;;
+    clean)   su_do xbps-remove -ROo;;
   esac
 }
 
 _slackpkg() {
   case "$OP" in
-    install) $SUDO slackpkg install "$@";;
-    remove)  $SUDO slackpkg remove "$@";;
+    install) su_do slackpkg install "$@";;
+    remove)  su_do slackpkg remove "$@";;
     list)    flist /var/log/packages;;
     count)   fcount /var/log/packages/*;;
-    update)  $SUDO slackpkg update gpg && $SUDO slackpkg update;;
+    update)  su_do slackpkg update gpg && su_do slackpkg update;;
     upgrade)
-      $SUDO slackpkg update gpg && $SUDO slackpkg update && \
-        $SUDO slackpkg upgrade-all
+      su_do slackpkg update gpg && su_do slackpkg update && \
+        su_do slackpkg upgrade-all
       ;;
     search)  slackpkg search "$@";;
     show)    slackpkg info "$@";;
     from)    slackpkg file-search "$@";;
     files)   filelistftr "$1";;
-    clean)   $SUDO slackpkg clean-system;;
+    clean)   su_do slackpkg clean-system;;
   esac
 }
 
 _zypper() {
   case "$OP" in
-    install) $SUDO zypper install "$@";;
-    remove)  $SUDO zypper remove -u "$@";;
+    install) su_do zypper install "$@";;
+    remove)  su_do zypper remove -u "$@";;
     list)    rpm -qa;;
     count)   rpm -qa | tot;;
-    update)  $SUDO zypper refresh;;
-    upgrade) $SUDO zypper refresh && $SUDO zypper update;;
+    update)  su_do zypper refresh;;
+    upgrade) su_do zypper refresh && su_do zypper update;;
     search)  zypper search "$@";;
     show)    zypper info "$@";;
     files)   rpm -ql "$@";;
@@ -361,12 +365,12 @@ _zypper() {
 
 _sorcery() {
   case "$OP" in
-    install) $SUDO cast "$@";;
-    remove)  $SUDO dispell "$@";;
+    install) su_do cast "$@";;
+    remove)  su_do dispell "$@";;
     list)    gaze installed;;
     count)   gaze installed | tot;;
-    update)  $SUDO sorcery -u;;
-    upgrade) $SUDO sorcery -ug;;
+    update)  su_do sorcery -u;;
+    upgrade) su_do sorcery -ug;;
     search)  gaze search "$@";;
     show)    gaze what "$@";;
     files)   gaze tablet spell-files "$@";;
@@ -377,33 +381,33 @@ _sorcery() {
 
 _lunar() {
   case "$OP" in
-    install) $SUDO lunar install "$@";;
-    remove)  $SUDO lunar remove "$@";;
+    install) su_do lunar install "$@";;
+    remove)  su_do lunar remove "$@";;
     list)    lvu installed;;
     count)   lvu installed | tot;;
-    update)  $SUDO lunar renew;;
-    upgrade) $SUDO lunar renew && $SUDO lunar update;;
+    update)  su_do lunar renew;;
+    upgrade) su_do lunar renew && su_do lunar update;;
     search)  lvu search "$@";;
     show)    lvu what "$@";;
     files)   lvu where "$@";;
     from)    lvu from "$@";;
-    clean)   $SUDO lunar prune;;
+    clean)   su_do lunar prune;;
   esac
 }
 
 _prt_get() {
   case "$OP" in
-    install) $SUDO prt-get install "$@";;
-    remove)  $SUDO prt-get remove "$@";;
+    install) su_do prt-get install "$@";;
+    remove)  su_do prt-get remove "$@";;
     list)    prt-get listinst;;
     count)   prt-get listinst | tot;;
-    update)  $SUDO ports -u;;
-    upgrade) $SUDO ports -u && $SUDO prt-get sysup;;
+    update)  su_do ports -u;;
+    upgrade) su_do ports -u && su_do prt-get sysup;;
     search)  prt-get search "$@";;
     show)    prt-get info "$@";;
     files)   prt-get ls "$@";;
     from)    prt-get fsearch "$@";;
-    clean)   $SUDO prt-get cache && pkgfoster;;
+    clean)   su_do prt-get cache && pkgfoster;;
   esac
 }
 
@@ -424,12 +428,12 @@ _guix() {
 
 _pkg_() {
   case "$OP" in
-    install) $SUDO pkg_add "$@";;
-    remove) $SUDO pkg_delete "$@";;
+    install) su_do pkg_add "$@";;
+    remove) su_do pkg_delete "$@";;
     list) pkg_info -v;;
     count) pkg_info -v | tot;;
     update) pem "unsupported: repo list only changes when user performs sys upgrade";;
-    upgrade) $SUDO pkg_add -u;;
+    upgrade) su_do pkg_add -u;;
     search) pkg_info "$@";;
     show) pkg_info "$@";;
     files) pkg_info -L "$@";;
