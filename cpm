@@ -164,7 +164,7 @@ if command -v sudo >/dev/null; then
   SUDO=sudo
 elif command -v doas >/dev/null && [ -f /etc/doas.conf ]; then
   SUDO=doas
-elif [ "$(whoami)" != root ]; then
+elif [ "$(id -u)" != 0 ]; then
   SUDO='su root -c '\''"$@"'\'' -- -'
 fi
 
