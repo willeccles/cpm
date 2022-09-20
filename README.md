@@ -22,12 +22,12 @@ $ cpm [i|r|l|u|U|s|S|I|F|f|c|h] [pkg]...
 ```
 
 ## Installation
+
 ```bash
 git clone https://github.com/willeccles/cpm.git
 cd cpm
-make install # as root; usually with "sudo"
+sudo make install
 ```
-And wow, it works.
 
 ## Supported package managers
 
