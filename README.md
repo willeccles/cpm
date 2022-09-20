@@ -21,6 +21,14 @@ $ cpm [i|r|l|u|U|s|S|I|F|f|c|h] [pkg]...
 -> h|help    show this message
 ```
 
+## Installation
+```bash
+git clone https://github.com/willeccles/cpm.git
+cd cpm
+make install # as root; usually with "sudo"
+```
+And wow, it works.
+
 ## Supported package managers
 
 - apk (Alpine/Adélie)
