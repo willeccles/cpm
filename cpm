@@ -1,6 +1,5 @@
 #!/bin/sh
 # vim: set ai ts=2 et sw=2 tw=80:
-
 # MIT License
 #
 # Copyright (c) 2022 Will Eccles
@@ -162,7 +161,7 @@ su_do() {
   if [ "$(id -u)" != 0 ]; then
     if command -v sudo >/dev/null; then
       sudo "$@"
-    elif command -v doas >/dev/null && [ -f /etc/doas.conf ]; then
+    elif command -v doas >/dev/null && [ -f /etc/doas.conf ] || [ -f /usr/local/etc/doas.conf ]; then
       doas "$@"
     else
       su root -c '"$@"' -- sh "$@"
@@ -442,6 +441,22 @@ _pkg_() {
   esac
 }
 
+_pkg() {
+  case "$OP" in
+    install) su_do pkg install "$@";;
+    remove) su_do pkg delete "$@";;
+    list) pkg info;;
+    count) pkg info | tot;;
+    update) su_do pkg update;;
+    upgrade) su_do pkg upgrade;;
+    search) pkg search "$@";;
+    show) pkg info "$@";;
+    files) pkg info -l "$@";;
+    from) pkg which "$@";;
+    clean) su_do pkg autoremove;;
+  esac
+}
+
 # Use pm=PKG_MANAGER cpm COMMAND to force a specific cpm function
 # ie.: pm=portage cpm list
 if [ "$pm" ] && has "_$pm"; then
@@ -489,6 +504,9 @@ elif ! [ "$(uname -s)" = "Darwin" ]; then
   elif has pkg_info; then
     # openbsd
     _pkg_ "$@"
+  elif has pkg; then
+    # freebsd
+    _pkg "$@"
   elif has snap; then
     pem "Snapd is not supported [wontfix]"
     exit 1
