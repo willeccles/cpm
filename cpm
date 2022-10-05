@@ -161,7 +161,7 @@ su_do() {
   if [ "$(id -u)" != 0 ]; then
     if command -v sudo >/dev/null; then
       sudo "$@"
-    elif command -v doas >/dev/null && [ -f /etc/doas.conf ] || [ -f /usr/local/etc/doas.conf ]; then
+    elif command -v doas >/dev/null && ([ -f /etc/doas.conf ] || [ -f /usr/local/etc/doas.conf ]); then
       doas "$@"
     else
       su root -c '"$@"' -- sh "$@"
