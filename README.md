@@ -45,7 +45,7 @@ sudo make install
 - urpmi (Mageia)
 - xbps (Void)
 - zypper (OpenSUSE)
-- pkg (OpenBSD)
+- pkg (FreeBSD and OpenBSD)
 
 ## Explicitly unsupported package managers
 
