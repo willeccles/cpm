@@ -319,7 +319,7 @@ _xbps() {
     list)    xbps-query -l;;
     count)   xbps-query -l | tot;;
     update)  su_do xbps-install -S;;
-    upgrade) su_do xbps-install -Su xbps && su_do xbps-install -Su;;
+    upgrade) su_do xbps-install -Su;;
     search)  xbps-query -s "$@" --repository;;
     show)    xbps-query -S "$@" --repository;;
     files)   xbps-query -f "$1" --repository;;
