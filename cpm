@@ -161,7 +161,8 @@ su_do() {
   if [ "$(id -u)" != 0 ]; then
     if command -v sudo >/dev/null; then
       sudo "$@"
-    elif command -v doas >/dev/null && ([ -f /etc/doas.conf ] || [ -f /usr/local/etc/doas.conf ]); then
+    elif command -v doas >/dev/null && \
+      ([ -f /etc/doas.conf ] || [ -f /usr/local/etc/doas.conf ]); then
       doas "$@"
     else
       su root -c '"$@"' -- sh "$@"
@@ -358,7 +359,9 @@ _zypper() {
     show)    zypper info "$@";;
     files)   rpm -ql "$@";;
     from)    zypper search -f "$@";;
-    clean)   pem "unsupported: this feature is functionally useless in this PM";;
+    clean)
+      pem "unsupported: this feature is functionally useless in this PM"
+      ;;
   esac
 }
 
@@ -374,7 +377,9 @@ _sorcery() {
     show)    gaze what "$@";;
     files)   gaze tablet spell-files "$@";;
     from)    gaze from "$@";;
-    clean)   pem "unsupported: this feature is functionally useless in this PM";;
+    clean)
+      pem "unsupported: this feature is functionally useless in this PM"
+      ;;
   esac
 }
 
@@ -420,7 +425,9 @@ _guix() {
     upgrade) guix pull && guix upgrade --keep-going;;
     search)  guix search "$@";;
     show)    guix show "$@";;
-    f*)      pem "unsupported: this feature is functionally useless in this PM";;
+    f*)
+      pem "unsupported: this feature is functionally useless in this PM"
+      ;;
     clean)   guix gc --delete-generations;;
   esac
 }
@@ -431,7 +438,9 @@ _pkg_() {
     remove) su_do pkg_delete "$@";;
     list) pkg_info -v;;
     count) pkg_info -v | tot;;
-    update) pem "unsupported: repo list only changes when user performs sys upgrade";;
+    update)
+      pem "unsupported: repo list only changes when user performs sys upgrade"
+      ;;
     upgrade) su_do pkg_add -u;;
     search) pkg_info "$@";;
     show) pkg_info "$@";;
