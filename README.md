@@ -37,21 +37,21 @@ sudo make install
 - emerge (Gentoo)
 - dnf (Fedora)
 - guix (non-system-wide Guix)
+- Homebrew
 - lunar (Lunar)
 - MacPorts (macOS)
 - pacman (Arch)
+- pkg (FreeBSD and OpenBSD)
 - slackpkg (Slackware)
 - sorcery (Source Mage)
 - urpmi (Mageia)
 - xbps (Void)
 - zypper (OpenSUSE)
-- pkg (FreeBSD and OpenBSD)
 
 ## Explicitly unsupported package managers
 
 - Cargo
 - Flatpak
-- Homebrew
 - Nix
 - NPM
 - Pip
