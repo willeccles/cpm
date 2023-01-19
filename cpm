@@ -312,6 +312,22 @@ _macports() {
   esac
 }
 
+_brew() {
+  case "$OP" in
+    install) brew install "$@";;
+    remove)  brew uninstall "$@";;
+    list)    brew list;;
+    count)   brew list | tot;;
+    update)  brew update;;
+    upgrade) brew update && brew upgrade;;
+    search)  brew search "$@";;
+    show)    brew info "$@";;
+    files)   pem "unsupported operation";;
+    from)    pem "unsupported operation";;
+    clean)   brew cleanup;;
+  esac
+}
+
 _xbps() {
   case "$OP" in
     install) su_do xbps-install "$@";;
@@ -527,8 +543,7 @@ else
   if has port; then
     _macports "$@"
   elif has brew; then
-    pem "Homebrew is not supported [wontfix]"
-    exit 1
+    _brew "$@"
   else
     pem "No valid package manager detected."
     exit 1
