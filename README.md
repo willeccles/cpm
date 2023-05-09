@@ -36,6 +36,7 @@ sudo make install
 - pkgutils (CRUX)
 - emerge (Gentoo)
 - dnf (Fedora)
+- rpm-ostree (Fedora Silverblue)
 - guix (non-system-wide Guix)
 - Homebrew
 - lunar (Lunar)
