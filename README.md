@@ -42,6 +42,7 @@ sudo make install
 - MacPorts (macOS)
 - pacman (Arch)
 - pkg (FreeBSD and OpenBSD)
+- rpm-ostree (Fedora Silverblue)
 - slackpkg (Slackware)
 - sorcery (Source Mage)
 - urpmi (Mageia)

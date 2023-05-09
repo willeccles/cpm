@@ -262,6 +262,22 @@ _dnf() {
   esac
 }
 
+_rpm_ostree() {
+  case "$OP" in
+    install) rpm-ostree install "$@";;
+    remove)  rpm-ostree uninstall "$@";;
+    list)    rpm -qa;;
+    count)   rpm -qa | tot;;
+    update)  rpm-ostree update;;
+    upgrade) rpm-ostree upgrade;;
+    search)  pem "unsupported: this feature is currently unavailable in this PM";;
+    show)    rpm -qi "$@";;
+    files)   rpm -ql "$@";;
+    from)    rpm -q --whatprovides "$@";;
+    clean)   rpm-ostree cleanup --rollback;;
+  esac
+}
+
 _pacman() {
   case "$OP" in
     install) su_do pacman -S "$@";;
@@ -499,6 +515,9 @@ elif ! [ "$(uname -s)" = "Darwin" ]; then
   elif has dnf; then
     # fedora
     _dnf "$@"
+  elif has rpm-ostree; then
+    # fedora silverblue
+    _rpm_ostree "$@"
   elif has pacman-key; then
     # arch/manjaro
     _pacman "$@"
